@@ -24,41 +24,53 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
 }
 
-/* O mapa Leaflet precisa ocupar todo o container */
+/* ---- Leaflet ---- */
 .leaflet-container {
   width: 100%;
   height: 100%;
-  background: #f4f6f8;
+  background: #eef2f4;
   font-family: var(--font-sans);
 }
+.leaflet-control-zoom {
+  display: none !important;
+}
+.leaflet-control-attribution {
+  font-size: 9px !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: #8a99a0 !important;
+}
+/* Reset do fundo/borda padrão dos divIcon */
+.mc-icon {
+  background: transparent;
+  border: none;
+}
 
-/* Marcador do veículo */
-.veiculo-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.veiculo-pino {
-  width: 34px;
-  height: 34px;
-  background: var(--primary);
-  border: 3px solid #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 17px;
-  box-shadow: 0 4px 14px rgba(37, 150, 190, 0.55);
-}
+/* Marcador do veículo: ponto GPS pulsante */
 .veiculo-pulso {
   position: absolute;
-  width: 34px;
-  height: 34px;
+  left: 50%;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
   border-radius: 50%;
-  background: rgba(37, 150, 190, 0.35);
-  animation: pulso 1.6s ease-out infinite;
+  background: rgba(37, 150, 190, 0.4);
+  animation: pulso 1.8s ease-out infinite;
+}
+.veiculo-dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid #fff;
+  box-shadow: 0 4px 14px rgba(37, 150, 190, 0.55);
 }
 @keyframes pulso {
   0% {
@@ -72,24 +84,83 @@ body {
 }
 
 /* Pinos de origem / destino */
-.ponto-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.ponto-origem {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(20, 50, 61, 0.35);
 }
-.ponto-dot {
+.ponto-destino {
   width: 18px;
   height: 18px;
   border-radius: 50%;
+  background: #14323d;
   border: 4px solid #fff;
-  box-shadow: 0 2px 8px rgba(20, 50, 61, 0.3);
+  box-shadow: 0 3px 10px rgba(20, 50, 61, 0.45);
 }
 
-/* Animações de entrada da home */
+/* Popup de evento ancorado no mapa.
+   O Leaflet aplica transform no elemento-raiz do marker (.mc-popup);
+   por isso o posicionamento fica no .popup-anchor e a animação no .popup-mapa. */
+.popup-anchor {
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  transform: translateX(-50%);
+}
+.popup-mapa {
+  position: relative;
+  width: 250px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 16px 44px rgba(20, 50, 61, 0.28);
+  transform-origin: bottom center;
+}
+.popup-mapa::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -9px;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid #fff;
+}
+.popup-entra {
+  animation: popIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.popup-sai {
+  animation: popOut 0.4s ease-in both;
+}
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes popOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+}
+
+/* Entradas suaves da UI */
 @keyframes subir {
   from {
     opacity: 0;
-    transform: translateY(22px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -97,52 +168,126 @@ body {
   }
 }
 .anim-subir {
-  animation: subir 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: subir 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-
-/* Animação dos cards de evento (fade + slide) */
-@keyframes cardEntra {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
-@keyframes cardSai {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(20px) scale(0.97);
-  }
-}
-.card-entra {
-  animation: cardEntra 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-.card-sai {
-  animation: cardSai 0.4s ease-in both;
+.anim-fade {
+  animation: fadeIn 0.5s ease both;
 }
 
-/* Barra de progresso superior */
+/* Barra de progresso */
 .barra-trilho {
-  background: rgba(37, 150, 190, 0.15);
+  background: rgba(37, 150, 190, 0.18);
 }
 .barra-preenchida {
   background: var(--primary);
-  transition: width 0.15s linear;
+  transition: width 0.12s linear;
 }
 
-/* Esconde controles padrão do Leaflet para visual mais limpo */
-.leaflet-control-zoom {
-  display: none !important;
+/* Waypoints (paradas intermediárias) no mapa */
+.parada-wrapper {
+  position: relative;
 }
-.leaflet-control-attribution {
-  font-size: 10px !important;
-  background: rgba(255, 255, 255, 0.7) !important;
-  color: #8a99a0 !important;
+.parada-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2.5px solid var(--primary);
+  box-shadow: 0 2px 6px rgba(37, 150, 190, 0.4);
+  position: absolute;
+  left: -5px;
+  top: -5px;
+}
+.parada-label {
+  position: absolute;
+  left: 10px;
+  top: -9px;
+  white-space: nowrap;
+  font-size: 10px;
+  font-weight: 700;
+  color: #14323d;
+  background: rgba(255,255,255,0.88);
+  border-radius: 6px;
+  padding: 1px 6px;
+  box-shadow: 0 1px 4px rgba(20,50,61,0.12);
+  pointer-events: none;
+}
+
+/* ---- Animação "pensando" enquanto espera o primeiro evento ---- */
+.thinking-dots span {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+  animation: piscar 1.3s ease-in-out infinite;
+}
+.thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes piscar {
+  0%, 80%, 100% { opacity: 0.15; transform: scale(0.75); }
+  40% { opacity: 1; transform: scale(1); }
+}
+
+/* ---- Timeline de eventos (abaixo do mapa) ---- */
+.timeline-item {
+  border-left: 3px solid var(--tipo-cor, #2596be);
+  animation: subir 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Botões de zoom custom */
+.zoom-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(219, 231, 236, 0.8);
+  box-shadow: 0 2px 8px rgba(20, 50, 61, 0.15);
+  font-size: 16px;
+  font-weight: 700;
+  color: #14323d;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: background 0.15s;
+}
+.zoom-btn:hover {
+  background: #fff;
+}
+
+/* Cidades no mapa de exploração */
+.cidade-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 6px rgba(37, 150, 190, 0.5);
+  position: absolute;
+  left: -4.5px;
+  top: -4.5px;
+}
+.cidade-label {
+  position: absolute;
+  left: 10px;
+  top: -8px;
+  white-space: nowrap;
+  font-size: 9px;
+  font-weight: 700;
+  color: #14323d;
+  background: rgba(255,255,255,0.85);
+  border-radius: 5px;
+  padding: 1px 5px;
+  box-shadow: 0 1px 3px rgba(20,50,61,0.1);
+  pointer-events: none;
 }

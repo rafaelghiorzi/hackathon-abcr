@@ -1,381 +1,330 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useEffect, useRef, useState } from "react";
-import Script from "next/script";
-import { ROTAS, TIPO_INFO, COR_PRIMARIA, BRASILIA, type Evento } from "../data";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { ROTAS, RESUMOS, TIPO_INFO, COR_PRIMARIA, PARADAS_POR_ROTA, type Evento } from "../data";
 
-// Tempo (em segundos) de deslocamento puro do veículo, sem contar as pausas.
-const DURACAO = 24;
-// Zoom de acompanhamento da câmera.
-const FOLLOW_ZOOM = 7;
-// Tempo que cada card permanece na tela.
-const CARD_MS = 3300;
+const DURACAO = 38;
+const FOLLOW_ZOOM = 9;
+const TILES = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+const LEAFLET_JS = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
 
-type CardState = { ev: Evento; saindo: boolean } | null;
+type Ativo = { timers: number[] };
+
+function carregarLeaflet(): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const w = window as any;
+    if (w.L) return resolve(w.L);
+    const existente = document.getElementById("leaflet-js") as HTMLScriptElement | null;
+    if (existente) {
+      existente.addEventListener("load", () => resolve(w.L));
+      existente.addEventListener("error", () => reject(new Error("CDN")));
+      return;
+    }
+    const s = document.createElement("script");
+    s.id = "leaflet-js";
+    s.src = LEAFLET_JS;
+    s.async = true;
+    s.onload = () => resolve(w.L);
+    s.onerror = () => reject(new Error("CDN"));
+    document.head.appendChild(s);
+  });
+}
 
 export default function JourneyMap({
   rotaId,
+  modo = "turistico",
   onVoltar,
+  onCompartilhar,
+  onConcluida,
+  onEvento,
 }: {
   rotaId: string;
+  modo?: "turistico" | "trabalho";
   onVoltar: () => void;
+  onCompartilhar?: () => void;
+  onConcluida?: () => void;
+  onEvento?: (ev: Evento) => void;
 }) {
   const rota = ROTAS[rotaId];
   const containerRef = useRef<HTMLDivElement>(null);
-  const [leafletReady, setLeafletReady] = useState(false);
+  const mapRef = useRef<any>(null);
+  const autoSeguirRef = useRef(true);
+
+  const [pronto, setPronto] = useState(false);
+  const [erro, setErro] = useState<string | null>(null);
   const [pct, setPct] = useState(0);
-  const [card, setCard] = useState<CardState>(null);
   const [resumo, setResumo] = useState(false);
+  const [seguindo, setSeguindo] = useState(true);
+
+  const reativarSeguir = useCallback(() => {
+    autoSeguirRef.current = true;
+    setSeguindo(true);
+  }, []);
 
   useEffect(() => {
-    if (!leafletReady || !containerRef.current) return;
-    const L = (window as any).L;
-    if (!L) return;
+    let vivo = true;
+    let map: any = null;
+    let raf = 0;
+    const timers: number[] = [];
+    const ativos: Ativo[] = [];
 
-    const coords = rota.coords as [number, number][];
-    const eventos = [...rota.eventos].sort((a, b) => a.progress - b.progress);
+    const addTimer = (fn: () => void, ms: number) => {
+      const t = window.setTimeout(fn, ms);
+      timers.push(t);
+      return t;
+    };
 
-    // ---- Mapa + tiles "clean" estilo Waze (CartoDB Positron) ----
-    const map = L.map(containerRef.current, {
-      zoomControl: false,
-      attributionControl: true,
-      zoomSnap: 0.25,
-      preferCanvas: true,
-    }).setView(BRASILIA, 6);
+    carregarLeaflet()
+      .then((L) => {
+        if (!vivo || !containerRef.current) return;
+        try { iniciar(L); }
+        catch (e: any) { setErro(e?.message || "Não foi possível iniciar o mapa."); }
+      })
+      .catch(() => setErro("Não foi possível carregar o mapa (verifique a internet)."));
 
-    L.tileLayer(
-      "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-      {
+    function iniciar(L: any) {
+      const coords = rota.coords as [number, number][];
+      const fontEventos = (modo === "trabalho" && rota.eventosTrabalho)
+        ? rota.eventosTrabalho
+        : rota.eventos;
+      const eventos = [...fontEventos].sort((a, b) => a.progress - b.progress);
+      const paradas = PARADAS_POR_ROTA[rotaId] ?? [];
+
+      const cum: number[] = [0];
+      const dist = (a: [number, number], b: [number, number]) => {
+        const mlat = (((a[0] + b[0]) / 2) * Math.PI) / 180;
+        return Math.hypot((b[1] - a[1]) * Math.cos(mlat), b[0] - a[0]);
+      };
+      for (let i = 1; i < coords.length; i++)
+        cum[i] = cum[i - 1] + dist(coords[i - 1], coords[i]);
+      const total = cum[cum.length - 1] || 1;
+
+      const locate = (p: number): [number, number] => {
+        const target = Math.max(0, Math.min(1, p)) * total;
+        let i = 0;
+        while (i < cum.length - 2 && cum[i + 1] < target) i++;
+        const f = Math.max(0, Math.min(1, (target - cum[i]) / (cum[i + 1] - cum[i] || 1)));
+        return [coords[i][0] + (coords[i + 1][0] - coords[i][0]) * f,
+                coords[i][1] + (coords[i + 1][1] - coords[i][1]) * f];
+      };
+
+      let segPtr = 0;
+      const posAt = (p: number): { latlng: [number, number]; i: number } => {
+        const target = p * total;
+        while (segPtr < cum.length - 2 && cum[segPtr + 1] < target) segPtr++;
+        const i = segPtr;
+        const f = Math.max(0, Math.min(1, (target - cum[i]) / (cum[i + 1] - cum[i] || 1)));
+        return {
+          latlng: [coords[i][0] + (coords[i + 1][0] - coords[i][0]) * f,
+                   coords[i][1] + (coords[i + 1][1] - coords[i][1]) * f],
+          i,
+        };
+      };
+
+      const eventosPos = eventos.map((e) => ({ ...e, latlng: locate(e.progress) }));
+
+      map = L.map(containerRef.current, {
+        zoomControl: false,
+        attributionControl: true,
+        dragging: true,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        boxZoom: false,
+        keyboard: false,
+        touchZoom: true,
+        zoomSnap: 0.5,
+      }).setView(coords[0], 6);
+
+      map.on("dragstart", () => {
+        autoSeguirRef.current = false;
+        setSeguindo(false);
+      });
+
+      L.tileLayer(TILES, {
         subdomains: "abcd",
         maxZoom: 19,
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-      }
-    ).addTo(map);
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+      }).addTo(map);
 
-    // ---- Geometria: traçado de fundo (cinza) e traçado animado (azul) ----
-    L.polyline(coords, {
-      color: "#cfd8dc",
-      weight: 5,
-      opacity: 0.9,
-      lineJoin: "round",
-      lineCap: "round",
-    }).addTo(map);
+      // Rota cinza (fundo) + rota azul (trecho percorrido)
+      L.polyline(coords, { color: "#c8d8de", weight: 6, opacity: 1, lineJoin: "round", lineCap: "round" }).addTo(map);
+      const linha = L.polyline([coords[0]], { color: COR_PRIMARIA, weight: 7, opacity: 1, lineJoin: "round", lineCap: "round" }).addTo(map);
 
-    const linhaAnimada = L.polyline([coords[0]], {
-      color: rota.cor,
-      weight: 6,
-      opacity: 1,
-      lineJoin: "round",
-      lineCap: "round",
-    }).addTo(map);
+      // Waypoints
+      paradas.forEach((p) => {
+        const ll = locate(p.progress);
+        L.marker(ll, {
+          icon: L.divIcon({
+            className: "mc-icon",
+            html: `<div class="parada-wrapper"><div class="parada-dot"></div><div class="parada-label">${p.nome}</div></div>`,
+            iconSize: [0, 0], iconAnchor: [0, 0],
+          }),
+          interactive: false,
+        }).addTo(map);
+      });
 
-    // ---- Pinos de origem e destino ----
-    L.marker(coords[0], {
-      icon: L.divIcon({
-        className: "ponto-icon",
-        html: `<div class="ponto-dot" style="background:${COR_PRIMARIA}"></div>`,
-        iconSize: [18, 18],
-        iconAnchor: [9, 9],
-      }),
-      interactive: false,
-    }).addTo(map);
+      // Origem e destino
+      L.marker(coords[0], { icon: L.divIcon({ className: "mc-icon", html: '<div class="ponto-origem"></div>', iconSize: [21, 21], iconAnchor: [10, 10] }), interactive: false }).addTo(map);
+      L.marker(coords[coords.length - 1], { icon: L.divIcon({ className: "mc-icon", html: '<div class="ponto-destino"></div>', iconSize: [26, 26], iconAnchor: [13, 13] }), interactive: false }).addTo(map);
 
-    L.marker(coords[coords.length - 1], {
-      icon: L.divIcon({
-        className: "ponto-icon",
-        html: `<div style="font-size:26px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3))">🏁</div>`,
-        iconSize: [26, 26],
-        iconAnchor: [6, 24],
-      }),
-      interactive: false,
-    }).addTo(map);
+      // Veículo
+      const veiculo = L.marker(coords[0], {
+        icon: L.divIcon({ className: "mc-icon", html: '<div class="veiculo-pulso"></div><div class="veiculo-dot"></div>', iconSize: [40, 40], iconAnchor: [20, 20] }),
+        interactive: false, zIndexOffset: 1000,
+      }).addTo(map);
 
-    // ---- Marcador do veículo ----
-    const veiculo = L.marker(coords[0], {
-      icon: L.divIcon({
-        className: "veiculo-icon",
-        html: `<div class="veiculo-pulso"></div><div class="veiculo-pino">🚗</div>`,
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
-      }),
-      interactive: false,
-      zIndexOffset: 1000,
-    }).addTo(map);
+      const iniciarViagem = () => {
+        if (!vivo) return;
+        segPtr = 0;
+        let p = 0;
+        let idx = 0;
+        let lastTs: number | null = null;
 
-    // ---- Pré-cálculo de distâncias acumuladas (velocidade constante) ----
-    const cum: number[] = [0];
-    const distEq = (a: number[], b: number[]) => {
-      const mlat = (((a[0] + b[0]) / 2) * Math.PI) / 180;
-      const dx = (b[1] - a[1]) * Math.cos(mlat);
-      const dy = b[0] - a[0];
-      return Math.hypot(dx, dy);
-    };
-    for (let i = 1; i < coords.length; i++) {
-      cum[i] = cum[i - 1] + distEq(coords[i - 1], coords[i]);
+        const frame = (ts: number) => {
+          if (!vivo) return;
+          if (lastTs == null) lastTs = ts;
+          const dt = (ts - lastTs) / 1000;
+          lastTs = ts;
+          p = Math.min(1, p + dt / DURACAO);
+
+          const { latlng, i } = posAt(p);
+          veiculo.setLatLng(latlng);
+          linha.setLatLngs([...coords.slice(0, i + 1), latlng]);
+          if (autoSeguirRef.current) map.panTo(latlng, { animate: false });
+
+          while (idx < eventosPos.length && p >= eventosPos[idx].progress) {
+            onEvento?.(eventosPos[idx]);
+            idx++;
+          }
+
+          setPct(Math.round(p * 100));
+
+          if (p >= 1) {
+            addTimer(() => { setResumo(true); onConcluida?.(); }, 700);
+            return;
+          }
+          raf = requestAnimationFrame(frame);
+        };
+        raf = requestAnimationFrame(frame);
+      };
+
+      mapRef.current = map;
+      addTimer(() => map && map.invalidateSize(), 80);
+      setPronto(true);
+
+      map.fitBounds(L.latLngBounds(coords), { padding: [28, 28] });
+      addTimer(() => {
+        if (!vivo) return;
+        map.invalidateSize();
+        map.flyTo(coords[0], FOLLOW_ZOOM, { duration: 1.4 });
+        addTimer(iniciarViagem, 1600);
+      }, 1100);
     }
-    const total = cum[cum.length - 1] || 1;
-
-    let segPtr = 0;
-    const posAt = (p: number): { latlng: [number, number]; i: number } => {
-      const target = p * total;
-      while (segPtr < cum.length - 1 && cum[segPtr + 1] < target) segPtr++;
-      const i = Math.min(segPtr, coords.length - 2);
-      const segLen = cum[i + 1] - cum[i] || 1;
-      const f = Math.max(0, Math.min(1, (target - cum[i]) / segLen));
-      const lat = coords[i][0] + (coords[i + 1][0] - coords[i][0]) * f;
-      const lng = coords[i][1] + (coords[i + 1][1] - coords[i][1]) * f;
-      return { latlng: [lat, lng], i };
-    };
-
-    const aplicar = (p: number) => {
-      const { latlng, i } = posAt(p);
-      veiculo.setLatLng(latlng);
-      linhaAnimada.setLatLngs([...coords.slice(0, i + 1), latlng]);
-      map.panTo(latlng, { animate: false });
-    };
-
-    // ---- Loop de animação ----
-    let p = 0;
-    let idx = 0;
-    let raf = 0;
-    let lastTs: number | null = null;
-    let pausado = false;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    let vivo = true;
-
-    const dispararEvento = (ev: Evento) => {
-      pausado = true;
-      setCard({ ev, saindo: false });
-      timers.push(
-        setTimeout(() => {
-          setCard((c) => (c ? { ...c, saindo: true } : c));
-        }, CARD_MS - 450)
-      );
-      timers.push(
-        setTimeout(() => {
-          setCard(null);
-          lastTs = null;
-          pausado = false;
-        }, CARD_MS)
-      );
-    };
-
-    const frame = (ts: number) => {
-      if (!vivo) return;
-      if (pausado) {
-        raf = requestAnimationFrame(frame);
-        return;
-      }
-      if (lastTs == null) lastTs = ts;
-      const dt = (ts - lastTs) / 1000;
-      lastTs = ts;
-      p = Math.min(1, p + dt / DURACAO);
-
-      if (idx < eventos.length && p >= eventos[idx].progress) {
-        const ev = eventos[idx];
-        idx++;
-        aplicar(eventos[idx - 1].progress);
-        setPct(Math.round(eventos[idx - 1].progress * 100));
-        dispararEvento(ev);
-        raf = requestAnimationFrame(frame);
-        return;
-      }
-
-      aplicar(p);
-      setPct(Math.round(p * 100));
-
-      if (p >= 1) {
-        timers.push(setTimeout(() => setResumo(true), 600));
-        return;
-      }
-      raf = requestAnimationFrame(frame);
-    };
-
-    // Intro: foca Brasília, depois começa a percorrer.
-    const arranque = setTimeout(() => {
-      if (!vivo) return;
-      map.setView(coords[0], FOLLOW_ZOOM, { animate: true, duration: 0.8 });
-      timers.push(
-        setTimeout(() => {
-          if (vivo) raf = requestAnimationFrame(frame);
-        }, 900)
-      );
-    }, 500);
-    timers.push(arranque);
-
-    // Garante o tamanho correto do mapa após montagem.
-    setTimeout(() => map.invalidateSize(), 200);
 
     return () => {
       vivo = false;
       cancelAnimationFrame(raf);
       timers.forEach(clearTimeout);
-      map.remove();
+      ativos.forEach((a) => a.timers.forEach(clearTimeout));
+      if (map) map.remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [leafletReady, rotaId]);
-
-  const info = card ? TIPO_INFO[card.ev.tipo] : null;
+  }, [rotaId]);
 
   return (
-    <div className="relative h-full w-full">
-      <Script
-        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossOrigin=""
-        strategy="afterInteractive"
-        onReady={() => setLeafletReady(true)}
-      />
+    <>
+      <div ref={containerRef} className="absolute inset-0" />
 
-      {/* Mapa */}
-      <div ref={containerRef} className="absolute inset-0 z-0" />
-
-      {/* Barra de progresso + cabeçalho */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-[1000] p-4 sm:p-5">
-        <div className="pointer-events-auto mx-auto flex max-w-2xl items-center gap-3 rounded-2xl bg-white/95 p-3 shadow-[0_8px_30px_rgba(20,50,61,0.12)] backdrop-blur sm:gap-4 sm:p-4">
-          <button
-            onClick={onVoltar}
-            aria-label="Voltar"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-[#5b727c] transition-colors hover:bg-[#eef4f6] hover:text-[#14323d]"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M19 12H5M11 18l-6-6 6-6"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-baseline justify-between gap-2">
-              <p className="truncate text-sm font-semibold text-[#14323d]">
-                Brasília → {rota.destino}
-              </p>
-              <p className="shrink-0 text-xs font-medium text-[#5b727c]">
-                {rota.distancia_km.toLocaleString("pt-BR")} km
-              </p>
-            </div>
-            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full barra-trilho">
-              <div
-                className="barra-preenchida h-full rounded-full"
-                style={{ width: `${pct}%` }}
-              />
-            </div>
-          </div>
+      {/* Barra de progresso */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 z-20">
+        <div className="h-[3px] barra-trilho">
+          <div className="barra-preenchida h-full transition-none" style={{ width: `${pct}%` }} />
         </div>
       </div>
 
-      {/* Loader enquanto o Leaflet carrega */}
-      {!leafletReady && (
-        <div className="absolute inset-0 z-[1500] flex items-center justify-center bg-white">
-          <div className="flex flex-col items-center gap-3">
-            <div
-              className="h-8 w-8 animate-spin rounded-full border-[3px] border-[#dbe7ec] border-t-primary"
-              style={{ borderTopColor: COR_PRIMARIA }}
-            />
-            <p className="text-sm font-medium text-[#5b727c]">
-              Preparando o caminho…
-            </p>
+      {/* Zoom + seguir */}
+      {pronto && !resumo && (
+        <>
+          <div className="absolute bottom-3 left-3 z-20 flex flex-col gap-1">
+            <button onClick={() => mapRef.current?.zoomIn()} className="zoom-btn" aria-label="Zoom in">+</button>
+            <button onClick={() => mapRef.current?.zoomOut()} className="zoom-btn" aria-label="Zoom out">−</button>
           </div>
-        </div>
-      )}
-
-      {/* Card de evento */}
-      {card && info && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1200] flex justify-center p-4 sm:p-6">
-          <div
-            className={`pointer-events-auto w-full max-w-md rounded-3xl bg-white p-6 shadow-[0_20px_60px_rgba(20,50,61,0.22)] ${
-              card.saindo ? "card-sai" : "card-entra"
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl"
-                style={{ background: "rgba(37,150,190,0.12)" }}
-              >
-                {info.icone}
-              </div>
-              <div>
-                <p
-                  className="text-xs font-bold uppercase tracking-wider"
-                  style={{ color: COR_PRIMARIA }}
-                >
-                  {info.rotulo}
-                </p>
-                <h3 className="text-lg font-bold leading-tight text-[#14323d]">
-                  {card.ev.titulo}
-                </h3>
-              </div>
-            </div>
-            <p className="mt-4 text-[15px] leading-relaxed text-[#5b727c]">
-              {card.ev.texto}
-            </p>
-            <div
-              className="mt-4 rounded-2xl px-4 py-3 text-center text-base font-bold"
-              style={{ background: "rgba(37,150,190,0.1)", color: COR_PRIMARIA }}
-            >
-              {card.ev.destaque}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Card final de resumo */}
-      {resumo && (
-        <div className="absolute inset-0 z-[1400] flex items-center justify-center bg-[#14323d]/30 p-6 backdrop-blur-sm">
-          <div className="card-entra w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-[0_24px_70px_rgba(20,50,61,0.3)]">
-            <div className="mx-auto mb-4 text-5xl">🏁</div>
-            <h2 className="text-2xl font-bold leading-tight text-[#14323d]">
-              {rota.resumo.titulo}
-            </h2>
-            <p className="mt-3 text-[15px] leading-relaxed text-[#5b727c]">
-              {rota.resumo.texto}
-            </p>
-
-            <div className="mt-6 grid grid-cols-2 gap-3">
-              <div className="rounded-2xl bg-[#f3f8fa] p-4">
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: COR_PRIMARIA }}
-                >
-                  {rota.distancia_km.toLocaleString("pt-BR")}
-                </p>
-                <p className="text-xs font-medium text-[#5b727c]">km percorridos</p>
-              </div>
-              <div className="rounded-2xl bg-[#f3f8fa] p-4">
-                <p
-                  className="text-2xl font-bold"
-                  style={{ color: COR_PRIMARIA }}
-                >
-                  {rota.eventos.length}
-                </p>
-                <p className="text-xs font-medium text-[#5b727c]">
-                  marcos no caminho
-                </p>
-              </div>
-            </div>
-
-            <div
-              className="mt-5 rounded-2xl px-4 py-3 text-base font-bold text-white"
-              style={{ background: COR_PRIMARIA }}
-            >
-              {rota.resumo.destaque}
-            </div>
-
+          {!seguindo && (
             <button
-              onClick={onVoltar}
-              className="mt-6 w-full rounded-2xl border border-[#e6edf0] py-3 text-sm font-semibold text-[#14323d] transition-colors hover:bg-[#f3f8fa]"
+              onClick={reativarSeguir}
+              className="absolute bottom-3 right-3 z-20 rounded-xl bg-white px-2.5 py-1.5 text-[11px] font-bold shadow-[0_4px_12px_rgba(20,50,61,0.18)] hover:bg-[#f3f8fa]"
+              style={{ color: COR_PRIMARIA }}
             >
+              Seguir veículo
+            </button>
+          )}
+        </>
+      )}
+
+      {/* Loader / erro */}
+      {(!pronto || erro) && (
+        <div className="absolute inset-0 z-30 flex items-center justify-center bg-[#eef2f4] px-6">
+          {erro ? (
+            <div className="text-center">
+              <p className="text-sm font-semibold text-[#14323d]">{erro}</p>
+              <button onClick={onVoltar} className="mt-4 rounded-xl border border-[#dbe7ec] px-4 py-2 text-sm font-medium text-[#5b727c] hover:bg-white">Voltar</button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-8 w-8 animate-spin rounded-full border-[3px] border-[#d3e1e7]" style={{ borderTopColor: COR_PRIMARIA }} />
+              <p className="text-sm font-medium text-[#5b727c]">Preparando o caminho…</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Resumo */}
+      {resumo && (
+        <div className="absolute inset-0 z-40 flex items-center justify-center bg-[#14323d]/40 p-4 backdrop-blur-sm">
+          <div className="popup-entra w-full max-w-xs rounded-3xl bg-white p-5 text-center shadow-[0_24px_70px_rgba(20,50,61,0.35)]">
+            <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full" style={{ background: COR_PRIMARIA }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-bold leading-tight text-[#14323d]">{RESUMOS[rotaId].titulo}</h2>
+            <p className="mt-1.5 text-[13px] leading-relaxed text-[#5b727c]">{RESUMOS[rotaId].texto}</p>
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <div className="rounded-2xl bg-[#f3f8fa] p-2.5">
+                <p className="text-lg font-bold" style={{ color: COR_PRIMARIA }}>{rota.distancia_km.toLocaleString("pt-BR")}</p>
+                <p className="text-[10px] font-medium text-[#5b727c]">km percorridos</p>
+              </div>
+              <div className="rounded-2xl bg-[#f3f8fa] p-2.5">
+                <p className="text-lg font-bold" style={{ color: COR_PRIMARIA }}>{rota.eventos.length}</p>
+                <p className="text-[10px] font-medium text-[#5b727c]">marcos no caminho</p>
+              </div>
+            </div>
+
+            <div className="mt-3 rounded-2xl px-4 py-2 text-[13px] font-bold text-white" style={{ background: COR_PRIMARIA }}>
+              {RESUMOS[rotaId].destaque}
+            </div>
+
+            {onCompartilhar && (
+              <button
+                onClick={onCompartilhar}
+                className="mt-2.5 flex w-full items-center justify-center gap-2 rounded-2xl py-2.5 text-[13px] font-semibold text-white hover:opacity-90"
+                style={{ background: "#14323d" }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Compartilhar viagem
+              </button>
+            )}
+
+            <button onClick={onVoltar} className="mt-2 w-full rounded-2xl border border-[#e6edf0] py-2.5 text-[13px] font-semibold text-[#14323d] hover:bg-[#f3f8fa]">
               Escolher outro destino
             </button>
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
