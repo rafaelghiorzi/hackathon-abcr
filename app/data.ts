@@ -199,6 +199,139 @@ export function googleMapsRotaCompleta(d: RotaDetalhe): string {
   return wp ? `${base}&waypoints=${wp}` : base;
 }
 
+// ---- Concessionárias (Seção "Responsáveis") ----
+export interface Concessionaria {
+  nome: string;
+  grupo: string;
+  rodovia: string;
+  trecho: string;
+  cor: string;
+  investimento: string;
+  stats: { valor: string; label: string }[];
+  oQueFaz: string[];
+  historia: { titulo: string; pessoa: string; texto: string };
+}
+
+// Dados reais de investimento/obras; as histórias pessoais são ILUSTRATIVAS.
+export const CONCESSIONARIAS: Record<string, Concessionaria> = {
+  "Via Cristais": {
+    nome: "Via Cristais",
+    grupo: "Vinci Highways",
+    rodovia: "BR-040",
+    trecho: "Cristalina (GO) → Belo Horizonte (MG) · 594 km",
+    cor: "#0c667f",
+    investimento: "R$ 12 bilhões em 30 anos",
+    stats: [
+      { valor: "R$ 12 bi", label: "investimento" },
+      { valor: "168 km", label: "faixas adicionais" },
+      { valor: "228", label: "câmeras 24h" },
+      { valor: "91 mil", label: "empregos gerados" },
+    ],
+    oQueFaz: [
+      "SAU 24h com guincho e ambulância gratuitos",
+      "168 km de faixas adicionais e 10 km de duplicação",
+      "Detecção automática de incidentes em 228 câmeras",
+      "4 faixas por sentido entre BH e a Ceasa até 2027",
+    ],
+    historia: {
+      titulo: "Da pista nova à sala de aula",
+      pessoa: "Joana, 19 anos · Cristalina (GO)",
+      texto: "A viagem noturna até a faculdade em BH assustava a família. Com a pista duplicada, o monitoramento 24h e o socorro garantido, Joana faz o trajeto sem medo — e foi a primeira da casa a entrar na universidade.",
+    },
+  },
+  "EPR Via Mineira": {
+    nome: "EPR Via Mineira",
+    grupo: "Grupo EPR",
+    rodovia: "BR-040",
+    trecho: "Belo Horizonte → Juiz de Fora (MG) · 232 km, 15 municípios",
+    cor: "#2f9e72",
+    investimento: "R$ 8,7 bilhões em 30 anos",
+    stats: [
+      { valor: "R$ 8,7 bi", label: "investimento" },
+      { valor: "500 km", label: "faixas refeitas" },
+      { valor: "66", label: "pontes restauradas" },
+      { valor: "114 mil t", label: "asfalto aplicado" },
+    ],
+    oQueFaz: [
+      "Recuperou 500 km de faixas só no 1º ano",
+      "Restaurou 66 pontes e viadutos",
+      "Centro de Controle Operacional 24h",
+      "Duplicação completa do trecho até 2031",
+    ],
+    historia: {
+      titulo: "O caminhão que não para mais na ponte",
+      pessoa: "Seu Antônio · caminhoneiro",
+      texto: "As pontes antigas obrigavam desvios e atrasos. Depois da restauração de 66 estruturas, a carga de Antônio chega no prazo — e ele dorme em casa mais cedo.",
+    },
+  },
+  "Elovias": {
+    nome: "Elovias",
+    grupo: "Triunfo + Construcap",
+    rodovia: "BR-040/495",
+    trecho: "Juiz de Fora (MG) → Rio de Janeiro (RJ)",
+    cor: "#0369a1",
+    investimento: "R$ 8,8 bilhões em 30 anos",
+    stats: [
+      { valor: "R$ 8,8 bi", label: "investimento" },
+      { valor: "4 → 6", label: "faixas na serra" },
+      { valor: "−5 km", label: "com o novo túnel" },
+      { valor: "R$ 5 bi", label: "em capacidade" },
+    ],
+    oQueFaz: [
+      "Duplica a Serra de Petrópolis (4 → 6 faixas)",
+      "Retoma o túnel que encurta 5 km do trajeto",
+      "Faixa de escape e socorro 24h na serra",
+      "R$ 5 bi destinados a ampliar a capacidade",
+    ],
+    historia: {
+      titulo: "A serra que deixou de assustar",
+      pessoa: "Família Ribeiro · Petrópolis (RJ)",
+      texto: "A descida da serra era o trecho mais temido do passeio de fim de semana. Com mais faixas e faixa de escape, a viagem virou rotina tranquila com as crianças.",
+    },
+  },
+  "Triunfo Concebra": {
+    nome: "Triunfo Concebra",
+    grupo: "Triunfo",
+    rodovia: "BR-060/153/262",
+    trecho: "DF / GO / MG · ~1.176 km",
+    cor: "#7c3aed",
+    investimento: "R$ 7,15 bilhões em 30 anos",
+    stats: [
+      { valor: "R$ 7,15 bi", label: "investimento" },
+      { valor: "1.176 km", label: "sob concessão" },
+      { valor: "24h", label: "socorro médico" },
+      { valor: "3", label: "rodovias integradas" },
+    ],
+    oQueFaz: [
+      "Socorro médico e mecânico em toda a malha",
+      "Conserva e recupera 1.176 km de pista",
+      "Integra o Centro-Oeste ao Sudeste",
+      "Pesagem e fiscalização para mais segurança",
+    ],
+    historia: {
+      titulo: "O atendimento que chegou a tempo",
+      pessoa: "Marcos · Uberlândia (MG)",
+      texto: "Depois de um pneu estourado à noite, a ambulância da concessionária chegou em minutos. 'Saber que tem socorro 24h muda tudo na estrada', conta Marcos.",
+    },
+  },
+};
+
+// Concessionárias presentes nas rotas informadas (sem duplicar, mantendo a ordem).
+export function concessionariasDasRotas(rotaIds: string[]): Concessionaria[] {
+  const vistos = new Set<string>();
+  const out: Concessionaria[] = [];
+  for (const id of rotaIds) {
+    for (const t of ROTAS[id]?.trechos ?? []) {
+      const c = CONCESSIONARIAS[t.concessionaria];
+      if (c && !vistos.has(c.nome)) {
+        vistos.add(c.nome);
+        out.push(c);
+      }
+    }
+  }
+  return out;
+}
+
 // ---- Chat de entrada (Tela 1) ----
 export interface CidadeOpcao {
   id: string;
@@ -242,27 +375,24 @@ export interface CidadeExplorada {
 }
 
 export const EXPLORACAO_MOCK = {
-  estados: ["SP", "RJ", "MG", "DF", "GO", "PR", "ES", "SC"],
+  // Pegada nacional: rotas do eixo central + viagens espalhadas pelo Brasil
+  estados: ["DF", "GO", "MG", "RJ", "SP", "MT", "AL", "BA", "PE", "CE", "AM", "RS"],
   cidades: [
-    // Eixo das rotas percorridas
+    // Eixo central percorrido
     { nome: "Brasília",       uf: "DF", lat: -15.7942, lng: -47.8825 },
-    { nome: "Cristalina",     uf: "GO", lat: -16.7675, lng: -47.6147 },
     { nome: "Belo Horizonte", uf: "MG", lat: -19.9167, lng: -43.9345 },
-    { nome: "Juiz de Fora",   uf: "MG", lat: -21.7611, lng: -43.3500 },
-    { nome: "Petrópolis",     uf: "RJ", lat: -22.5050, lng: -43.1791 },
     { nome: "Rio de Janeiro", uf: "RJ", lat: -22.9068, lng: -43.1729 },
-    // Triângulo Mineiro
-    { nome: "Goiânia",        uf: "GO", lat: -16.6869, lng: -49.2648 },
     { nome: "Uberaba",        uf: "MG", lat: -19.7472, lng: -47.9381 },
-    { nome: "Araxá",          uf: "MG", lat: -19.5933, lng: -46.9403 },
-    // Lugares legais visitados (bate-volta a partir das rotas)
-    { nome: "Ouro Preto",     uf: "MG", lat: -20.3856, lng: -43.5035 },
-    { nome: "Tiradentes",     uf: "MG", lat: -21.1100, lng: -44.1772 },
+    // Espalhadas pelo Brasil
+    { nome: "Cuiabá",         uf: "MT", lat: -15.6010, lng: -56.0974 },
+    { nome: "Maceió",         uf: "AL", lat: -9.6498,  lng: -35.7089 },
+    { nome: "Salvador",       uf: "BA", lat: -12.9777, lng: -38.5016 },
+    { nome: "Recife",         uf: "PE", lat: -8.0476,  lng: -34.8770 },
+    { nome: "Fortaleza",      uf: "CE", lat: -3.7319,  lng: -38.5267 },
+    { nome: "Manaus",         uf: "AM", lat: -3.1190,  lng: -60.0217 },
+    { nome: "Porto Alegre",   uf: "RS", lat: -30.0346, lng: -51.2177 },
     { nome: "São Paulo",      uf: "SP", lat: -23.5505, lng: -46.6333 },
-    { nome: "Paraty",         uf: "RJ", lat: -23.2178, lng: -44.7131 },
-    { nome: "Vitória",        uf: "ES", lat: -20.3155, lng: -40.3128 },
-    { nome: "Curitiba",       uf: "PR", lat: -25.4297, lng: -49.2715 },
-    { nome: "Florianópolis",  uf: "SC", lat: -27.5949, lng: -48.5482 },
+    { nome: "Chapada dos Guimarães", uf: "MT", lat: -15.4606, lng: -55.7497 },
   ] as CidadeExplorada[],
-  pct_brasil: 14,
+  pct_brasil: 31,
 };

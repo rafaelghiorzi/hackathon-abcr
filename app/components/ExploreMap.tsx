@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useRef, useState } from "react";
-import { COR_PRIMARIA, EXPLORACAO_MOCK, ROTAS } from "../data";
+import { COR_ACENTO, COR_ACENTO_DARK, COR_PRIMARIA, EXPLORACAO_MOCK, ROTAS } from "../data";
 
 const TILES = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 const LEAFLET_JS = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
@@ -91,10 +91,10 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
             style: (feature: any) => {
               const visitado = estados.includes(feature.properties.uf);
               return {
-                fillColor: visitado ? COR_PRIMARIA : "#dde8ed",
-                fillOpacity: visitado ? 0.45 : 0.40,
-                color: "#b0c5cd",
-                weight: 0.8,
+                fillColor: visitado ? COR_ACENTO : "#dde8ed",
+                fillOpacity: visitado ? 0.55 : 0.40,
+                color: visitado ? COR_ACENTO_DARK : "#b0c5cd",
+                weight: visitado ? 1 : 0.8,
               };
             },
           }).addTo(map);
@@ -164,8 +164,8 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
           </svg>
         </button>
         <div>
-          <h2 className="text-lg font-bold text-[#14323d]">Meu mapa</h2>
-          <p className="text-[12px] text-[#9bacb3]">Rotas que você já percorreu</p>
+          <h2 className="font-display text-lg font-extrabold tracking-tight text-[#08323d]">Meu mapa</h2>
+          <p className="text-[12px] text-[#9bacb3]">O Brasil que você já percorreu</p>
         </div>
       </div>
 
@@ -176,9 +176,13 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
           { val: cidades.length, label: "cidades" },
           { val: `${pct_brasil}%`, label: "do Brasil" },
         ].map((s, i) => (
-          <div key={i} className="rounded-2xl border border-[#e8f0f3] bg-white p-3 text-center shadow-[0_4px_14px_rgba(20,50,61,0.07)]">
-            <p className="text-2xl font-bold" style={{ color: COR_PRIMARIA }}>{s.val}</p>
-            <p className="mt-0.5 text-[11px] font-medium text-[#5b727c]">{s.label}</p>
+          <div
+            key={i}
+            className="rounded-2xl border p-3 text-center shadow-[0_4px_14px_rgba(20,50,61,0.07)]"
+            style={{ borderColor: "#dcefc2", background: "#f6fbee" }}
+          >
+            <p className="text-2xl font-extrabold" style={{ color: COR_ACENTO_DARK }}>{s.val}</p>
+            <p className="mt-0.5 text-[11px] font-semibold text-[#5b727c]">{s.label}</p>
           </div>
         ))}
       </div>
@@ -209,7 +213,7 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
       {/* Legenda */}
       <div className="anim-fade mt-3 flex flex-wrap items-center justify-center gap-4 text-[11px] text-[#9bacb3]" style={{ animationDelay: "0.4s" }}>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-3 w-3 rounded-sm" style={{ background: COR_PRIMARIA, opacity: 0.5 }} />
+          <span className="inline-block h-3 w-3 rounded-sm" style={{ background: COR_ACENTO, opacity: 0.7 }} />
           Estados visitados
         </span>
         <span className="flex items-center gap-1.5">
@@ -217,7 +221,7 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
           Rodovias percorridas
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: COR_PRIMARIA }} />
+          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{ background: COR_ACENTO_DARK }} />
           Cidades
         </span>
       </div>

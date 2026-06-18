@@ -13,34 +13,42 @@
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 — o caminho direto, ~745 km",
-        "texto": "A rota mais rápida liga Brasília a BH quase toda pela BR-040. A Via Cristais assumiu o trecho Cristalina–BH (594 km) em março/2025, com R$ 12 bi em 30 anos e 168 km de faixas adicionais para manter a fluidez.",
-        "destaque": "Via Cristais · R$ 12 bi",
-        "duracao_ms": 6000
+        "titulo": "BR-040: 745 km diretos a BH",
+        "texto": "Via Cristais: R$ 12 bi e 168 km de faixas adicionais para não ficar preso atrás de caminhão.",
+        "destaque": "R$ 12 bi investidos",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.3,
         "tipo": "logistica",
-        "titulo": "Faixas adicionais contra os comboios",
-        "texto": "Em rodovia de pista simples, faixas adicionais nas subidas evitam ficar preso atrás de caminhão. São 168 km de faixas extras previstas — o que mais economiza tempo numa viagem direta.",
-        "destaque": "168 km de faixas extras",
-        "duracao_ms": 5500
+        "titulo": "Faixas extras nas subidas",
+        "texto": "168 km de faixas adicionais previstas. Ultrapassagem segura no Cerrado.",
+        "destaque": "168 km de faixas",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.5,
+        "tipo": "seguranca",
+        "titulo": "Olhos na estrada 24h",
+        "texto": "228 câmeras, 28 painéis e detecção automática de incidentes.",
+        "destaque": "228 câmeras",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.72,
         "tipo": "logistica",
-        "titulo": "Entrada de BH — duplicação até 2027",
-        "texto": "Nos arredores da capital, a BR-040 terá quatro faixas por sentido entre BH e a Ceasa a partir de 2027 (obra de R$ 2,5 bi). A chegada na cidade, hoje o maior gargalo, fica muito mais rápida.",
-        "destaque": "4 faixas/sentido até 2027",
-        "duracao_ms": 5500
+        "titulo": "Chegada a BH sem gargalo",
+        "texto": "4 faixas por sentido entre BH e a Ceasa até 2027 (obra de R$ 2,5 bi).",
+        "destaque": "4 faixas/sentido",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.95,
         "tipo": "seguranca",
-        "titulo": "228 câmeras de olho na pista",
-        "texto": "O trecho conta com 228 câmeras, 28 painéis de mensagem e detecção automática de incidentes. Você é avisado de filas e acidentes antes de chegar neles — viagem direta sem surpresas.",
-        "destaque": "Detecção automática 24h",
-        "duracao_ms": 5000
+        "titulo": "Socorro garantido",
+        "texto": "SAU com guincho e ambulância gratuitos em todo o trecho.",
+        "destaque": "SAU 24h",
+        "duracao_ms": 4800
       }
     ],
     "criancas": [
@@ -48,85 +56,93 @@
         "progress": 0.06,
         "tipo": "concessionaria",
         "titulo": "BR-040 monitorada para a família",
-        "texto": "Via Cristais (Cristalina–BH) e EPR Via Mineira (entrada de BH) mantêm SAU 24h, ambulâncias e guincho gratuito. Com R$ 12 bi previstos, a estrada para BH fica mais segura para quem viaja com crianças.",
-        "destaque": "SAU e ambulância 24h",
-        "duracao_ms": 6000
+        "texto": "Via Cristais e EPR com SAU, ambulância e guincho 24h. Tranquilidade no banco de trás.",
+        "destaque": "Socorro 24h",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.28,
         "tipo": "parada",
-        "titulo": "Cristalina — caça aos cristais",
-        "texto": "Parada divertida: a garotada escolhe ametistas e quartzos verdadeiros nas bancas à beira da estrada. Banheiro, lanche e combustível antes de seguir. Daqui a Via Cristais cuida dos 594 km até BH.",
-        "destaque": "Pedras de verdade · parada rápida",
-        "duracao_ms": 5000
+        "titulo": "Cristalina: caça aos cristais",
+        "texto": "Ametistas de verdade nas bancas. Lanche e banheiro antes de seguir.",
+        "destaque": "Pedras de verdade",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.5,
+        "tipo": "seguranca",
+        "titulo": "Pista lisa, criança tranquila",
+        "texto": "Pavimento novo e sinalização refeita reduzem o solavanco da viagem.",
+        "destaque": "Pavimento novo",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.77,
         "tipo": "parada",
-        "titulo": "Sete Lagoas — Gruta Rei do Mato",
-        "texto": "A 60 km de BH, a Gruta Rei do Mato é um passeio que as crianças amam: estalactites, salões enormes e trilha leve. Ótima pausa antes de chegar à capital, com boa estrutura saindo da rodovia.",
-        "destaque": "Caverna a 60 km de BH",
-        "duracao_ms": 5500
+        "titulo": "Sete Lagoas: Gruta Rei do Mato",
+        "texto": "Caverna com salões enormes a 60 km de BH. A criançada ama.",
+        "destaque": "Aventura a 60 km de BH",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.92,
         "tipo": "parada",
-        "titulo": "Belo Horizonte — parques para a família",
-        "texto": "BH recebe a turma com o Parque das Mangabeiras, o Mineirão e o Museu de Ciências. A EPR Via Mineira cuida da entrada da cidade, com pista renovada e monitorada até o centro.",
-        "destaque": "Parques e museus",
-        "duracao_ms": 5000
+        "titulo": "BH: parques e ciência",
+        "texto": "Parque das Mangabeiras e Museu de Ciências esperam a turma.",
+        "destaque": "Parques na chegada",
+        "duracao_ms": 4800
       }
     ],
     "historico": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 — Rodovia JK, duas capitais",
-        "texto": "A BR-040 liga a capital que JK construiu à cidade que ele governou. De Cristalina a BH (594 km), a Via Cristais assumiu em março/2025 com R$ 12 bi em 30 anos.",
-        "destaque": "Via Cristais · R$ 12 bi",
-        "duracao_ms": 5500
+        "titulo": "BR-040: a Rodovia JK",
+        "texto": "De Cristalina a BH, 594 km sob a Via Cristais, R$ 12 bi investidos.",
+        "destaque": "Via Cristais",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.28,
-        "tipo": "curiosidade",
-        "titulo": "Cristalina — capital do cristal",
-        "texto": "Maior polo de cristais de rocha e ametistas do Brasil. É aqui que a Via Cristais assume os 594 km até BH. Para roteiro histórico completo, considere o caminho pelo Triângulo Mineiro.",
-        "destaque": "60% dos cristais do Brasil",
-        "duracao_ms": 5000
+        "tipo": "parada",
+        "titulo": "Cristalina: capital do cristal",
+        "texto": "Maior polo de ametistas do Brasil.",
+        "destaque": "Polo de cristais",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.85,
         "tipo": "parada",
-        "titulo": "BH — porta da Estrada Real",
-        "texto": "Belo Horizonte é o ponto de partida para Ouro Preto, Congonhas e Tiradentes, o circuito barroco da Estrada Real (Patrimônio UNESCO). A Via Cristais recuperou 155 km de pavimento neste trecho.",
-        "destaque": "Patrimônio UNESCO a poucos km",
-        "duracao_ms": 5000
+        "titulo": "BH: porta da Estrada Real",
+        "texto": "Ouro Preto, Congonhas e Tiradentes a poucos km — Patrimônio UNESCO.",
+        "destaque": "Estrada Real",
+        "duracao_ms": 4800
       }
     ],
     "culinaria": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 — pausa segura no Cerrado",
-        "texto": "A Via Cristais mantém SAU 24h e áreas de apoio na rota direta. Bom para parar e provar a comida de beira de estrada com segurança.",
-        "destaque": "Apoio 24h na rota",
-        "duracao_ms": 5000
+        "titulo": "BR-040: pausa segura no Cerrado",
+        "texto": "SAU 24h e áreas de apoio da Via Cristais.",
+        "destaque": "Apoio 24h",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.28,
         "tipo": "parada",
-        "titulo": "Cerrado — pamonha e pão de queijo",
-        "texto": "Barracas em Cristalina e arredores vendem pamonha, pão de queijo e doces do Cerrado. Para um roteiro gastronômico completo, o caminho pelo Triângulo Mineiro tem Araxá e Uberaba.",
-        "destaque": "Sabores do Cerrado",
-        "duracao_ms": 5000
+        "titulo": "Cristalina: sabor do Cerrado",
+        "texto": "Pamonha, pão de queijo e doces nas bancas.",
+        "destaque": "Cerrado no prato",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.9,
         "tipo": "parada",
-        "titulo": "BH — Mercado Central",
-        "texto": "A capital fecha a viagem com o Mercado Central: queijo canastra, cachaça, doces e o famoso fígado com jiló dos botecos. Comida mineira de verdade.",
-        "destaque": "Mercado Central de BH",
-        "duracao_ms": 5000
+        "titulo": "BH: Mercado Central",
+        "texto": "Queijo canastra, cachaça e o fígado com jiló dos botecos.",
+        "destaque": "Mercado Central",
+        "duracao_ms": 4800
       }
     ]
   },
@@ -135,25 +151,25 @@
       "progress": 0.25,
       "tipo": "cidade",
       "titulo": "Cristalina — GO",
-      "texto": "Capital nacional do cristal de rocha. As bancas às margens da BR-040 são parada clássica. Daqui a Via Cristais cuida dos próximos 594 km até BH.",
-      "destaque": "~165 km de Brasília",
-      "duracao_ms": 4500
+      "texto": "Capital do cristal. Via Cristais assume os 594 km até BH.",
+      "destaque": "Polo de ametistas",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.62,
       "tipo": "cidade",
       "titulo": "Paraopeba — MG",
-      "texto": "Coração do Vale do Paraopeba, polo siderúrgico. Boa estrutura de postos e alimentação próxima à rodovia — última parada antes de Sete Lagoas.",
-      "destaque": "Polo siderúrgico",
-      "duracao_ms": 4000
+      "texto": "Polo siderúrgico com bom apoio de postos na pista.",
+      "destaque": "Vale do aço",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.77,
       "tipo": "cidade",
       "titulo": "Sete Lagoas — MG",
-      "texto": "A 60 km de BH, última parada com boa infraestrutura antes da capital. A Gruta Rei do Mato fica a poucos quilômetros.",
-      "destaque": "60 km de BH · Gruta Rei do Mato",
-      "duracao_ms": 4500
+      "texto": "A 60 km de BH, última grande parada. Gruta Rei do Mato perto.",
+      "destaque": "60 km de BH",
+      "duracao_ms": 4200
     }
   ],
   "waypoints": [

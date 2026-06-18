@@ -13,136 +13,152 @@
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-060/153/262 — Triunfo Concebra",
-        "texto": "O caminho pelo Triângulo Mineiro cruza ~1.176 km sob a Triunfo Concebra, que administra 630 km da BR-060/153 e 546 km da BR-262, com R$ 7,15 bi de investimento em 30 anos. Socorro médico e mecânico cobrem todo o trajeto.",
-        "destaque": "Triunfo Concebra · R$ 7,15 bi",
-        "duracao_ms": 6000
+        "titulo": "BR-060/153/262: Triunfo Concebra",
+        "texto": "~1.176 km sob uma só concessionária, com socorro médico e mecânico ponta a ponta.",
+        "destaque": "R$ 7,15 bi · 1.176 km",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.18,
-        "tipo": "curiosidade",
-        "titulo": "Goiânia — cidade planejada e Art Déco",
-        "texto": "Capital projetada nos anos 1930, Goiânia tem um dos maiores acervos Art Déco do mundo, na Praça Cívica. Vale o desvio pela BR-060 antes de descer rumo ao Triângulo Mineiro.",
-        "destaque": "Acervo Art Déco",
-        "duracao_ms": 5500
+        "tipo": "parada",
+        "titulo": "Goiânia: capital Art Déco",
+        "texto": "Um dos maiores acervos Art Déco do mundo, na Praça Cívica.",
+        "destaque": "Art Déco",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.45,
+        "tipo": "seguranca",
+        "titulo": "Eixo do agro, pista vigiada",
+        "texto": "O trecho de Uberlândia e Uberaba tem monitoramento e socorro da Concebra.",
+        "destaque": "Monitorado 24h",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.55,
         "tipo": "parada",
-        "titulo": "Uberaba — dinossauros e barroco",
-        "texto": "Peirópolis, a 19 km do centro, é capital nacional dos fósseis, com Museu dos Dinossauros. No centro, o Museu de Arte Sacra ocupa a Igreja de Santa Rita (1854), com acervo barroco dos séculos 18 e 19.",
-        "destaque": "Fósseis + arte sacra",
-        "duracao_ms": 5500
+        "titulo": "Uberaba: dinossauros e barroco",
+        "texto": "Peirópolis, capital dos fósseis, e a arte sacra da Igreja de Santa Rita (1854).",
+        "destaque": "Fósseis + barroco",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.68,
         "tipo": "parada",
-        "titulo": "Araxá — o Grande Hotel e as Termas",
-        "texto": "Joia Art Déco dos anos 1940, o Grande Hotel e Termas de Araxá é o maior complexo de águas sulfurosas do Brasil. Parada histórica e de descanso a caminho de BH, pela BR-262.",
-        "destaque": "Termas Art Déco",
-        "duracao_ms": 5500
+        "titulo": "Araxá: termas Art Déco",
+        "texto": "Grande Hotel e o maior complexo de águas sulfurosas do país.",
+        "destaque": "Águas termais",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.95,
         "tipo": "parada",
-        "titulo": "BH — porta da Estrada Real",
-        "texto": "A chegada a Belo Horizonte abre o circuito barroco da Estrada Real: Ouro Preto, Congonhas e Tiradentes, Patrimônio Mundial da UNESCO, a poucos quilômetros.",
-        "destaque": "Estrada Real · UNESCO",
-        "duracao_ms": 5000
+        "titulo": "BH: porta da Estrada Real",
+        "texto": "Ouro Preto e Tiradentes, Patrimônio UNESCO, a poucos km.",
+        "destaque": "Estrada Real",
+        "duracao_ms": 4800
       }
     ],
     "culinaria": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-060/153/262 — apoio em todo o Triângulo",
-        "texto": "A Triunfo Concebra mantém socorro médico e mecânico ao longo dos ~1.176 km da rota pelo Triângulo Mineiro. Parar para comer bem com segurança faz parte do passeio gastronômico.",
-        "destaque": "Triunfo Concebra · 1.176 km",
-        "duracao_ms": 5500
+        "titulo": "BR-060/153/262: pare e coma seguro",
+        "texto": "Socorro e áreas de apoio da Triunfo Concebra nos ~1.176 km.",
+        "destaque": "Apoio em toda a rota",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.18,
         "tipo": "parada",
-        "titulo": "Goiânia — empadão e pamonha",
-        "texto": "A capital goiana é parada certa para o empadão goiano, a pamonha e o pequi. Sabores fortes do Cerrado para abrir a viagem antes de entrar no Triângulo Mineiro.",
-        "destaque": "Empadão goiano & pequi",
-        "duracao_ms": 5000
+        "titulo": "Goiânia: empadão e pamonha",
+        "texto": "Cerrado no prato: pequi, pamonha e o empadão goiano.",
+        "destaque": "Sabor goiano",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.45,
+        "tipo": "logistica",
+        "titulo": "Triângulo: eixo do agronegócio",
+        "texto": "Uberlândia e Uberaba abastecem o país; a pista escoa essa produção.",
+        "destaque": "Polo logístico",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.55,
         "tipo": "parada",
-        "titulo": "Uberaba — Mercado Municipal",
-        "texto": "Ícone gastronômico do Triângulo, o Mercado Municipal de Uberaba reúne queijos, doces, frutas e quitandas mineiras sob arquitetura histórica. Parada obrigatória para provar a roça em forma de comida.",
+        "titulo": "Uberaba: Mercado Municipal",
+        "texto": "Queijos, doces e quitandas mineiras sob arquitetura histórica.",
         "destaque": "Queijos & quitandas",
-        "duracao_ms": 5500
+        "duracao_ms": 4800
       },
       {
         "progress": 0.68,
         "tipo": "parada",
-        "titulo": "Araxá — o melhor queijo do mundo",
-        "texto": "Araxá ganhou em Paris o prêmio de melhor queijo do mundo. A região do queijo do Serro e da Canastra está logo adiante: leve uma peça para casa direto do produtor.",
-        "destaque": "Queijo premiado em Paris",
-        "duracao_ms": 5500
+        "titulo": "Araxá: melhor queijo do mundo",
+        "texto": "Premiado em Paris. A região do Canastra começa aqui.",
+        "destaque": "Queijo premiado",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.95,
         "tipo": "parada",
-        "titulo": "BH — Mercado Central",
-        "texto": "A viagem termina no Mercado Central de Belo Horizonte: canastra, cachaça, doce de leite e o fígado com jiló dos botecos. O grand finale da rota gastronômica mineira.",
-        "destaque": "Mercado Central de BH",
-        "duracao_ms": 5000
+        "titulo": "BH: Mercado Central",
+        "texto": "Canastra, cachaça e doce de leite no fim da viagem.",
+        "destaque": "Mercado Central",
+        "duracao_ms": 4800
       }
     ],
     "criancas": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "Triunfo Concebra — socorro em toda a rota",
-        "texto": "A rota pelo Triângulo Mineiro é mais longa, mas cheia de paradas para crianças. A Triunfo Concebra mantém socorro médico e mecânico nos ~1.176 km da BR-060/153/262.",
-        "destaque": "Socorro 24h na rota",
-        "duracao_ms": 5500
+        "titulo": "Triunfo Concebra: socorro o tempo todo",
+        "texto": "Rota longa, mas com socorro médico e mecânico em todos os ~1.176 km.",
+        "destaque": "Socorro 24h",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.45,
         "tipo": "parada",
-        "titulo": "Uberlândia — Parque do Sabiá",
-        "texto": "Dia perfeito em família: o Parque do Sabiá tem zoológico, lagos, bosque e piscinas. A maior parada kids-friendly do Triângulo Mineiro, fácil acesso pela rodovia.",
+        "titulo": "Uberlândia: Parque do Sabiá",
+        "texto": "Zoológico, lagos e bosque. O melhor dia em família do Triângulo.",
         "destaque": "Zoológico e bosque",
-        "duracao_ms": 5500
+        "duracao_ms": 4800
       },
       {
         "progress": 0.55,
         "tipo": "parada",
-        "titulo": "Uberaba — Museu dos Dinossauros",
-        "texto": "Em Peirópolis, as crianças viram paleontólogas: fósseis de dinossauros encontrados na própria região, trilhas e cachoeiras. Aventura garantida a 19 km do centro.",
-        "destaque": "Dinossauros de verdade",
-        "duracao_ms": 5500
+        "titulo": "Uberaba: Museu dos Dinossauros",
+        "texto": "Fósseis de verdade em Peirópolis. Aventura paleontológica.",
+        "destaque": "Dinossauros",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.68,
         "tipo": "parada",
-        "titulo": "Araxá — águas e descanso",
-        "texto": "As termas de Araxá rendem um banho relaxante para toda a família antes da etapa final até BH, pela BR-262.",
-        "destaque": "Banho nas termas",
-        "duracao_ms": 5000
+        "titulo": "Araxá: banho nas termas",
+        "texto": "Águas relaxantes antes da reta final a BH.",
+        "destaque": "Águas termais",
+        "duracao_ms": 4800
       }
     ],
     "rapida": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "Rota cênica — não é a mais curta",
-        "texto": "O caminho pelo Triângulo Mineiro (~1.100 km) é mais longo que a BR-040 direta (~745 km). Vale pelo turismo, não pela pressa. A Triunfo Concebra mantém pista monitorada e socorro em todo o trecho.",
-        "destaque": "Prefira a BR-040 se tem pressa",
-        "duracao_ms": 5500
+        "titulo": "Rota cênica, não a mais curta",
+        "texto": "~1.160 km contra os 745 km da BR-040 direta. Esta vale pelo passeio.",
+        "destaque": "Prefira a BR-040 com pressa",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.55,
-        "tipo": "logistica",
-        "titulo": "Triângulo Mineiro — eixo logístico",
-        "texto": "Uberlândia e Uberaba formam um dos maiores polos de logística e agronegócio do país. A BR-153/BR-262 conecta esse eixo a BH com socorro mecânico da Triunfo Concebra.",
-        "destaque": "Polo de agronegócio",
-        "duracao_ms": 5000
+        "progress": 0.5,
+        "tipo": "seguranca",
+        "titulo": "Pista monitorada da Concebra",
+        "texto": "Socorro mecânico e médico em todo o eixo BR-060/153/262.",
+        "destaque": "Monitorada 24h",
+        "duracao_ms": 4800
       }
     ]
   },
@@ -151,49 +167,49 @@
       "progress": 0.18,
       "tipo": "cidade",
       "titulo": "Goiânia — GO",
-      "texto": "Capital planejada com forte acervo Art Déco e ótima gastronomia goiana. Início do trecho da Triunfo Concebra pela BR-060/153.",
-      "destaque": "Art Déco & empadão",
-      "duracao_ms": 4500
+      "texto": "Capital Art Déco. Início do trecho da Triunfo Concebra.",
+      "destaque": "Art Déco",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.34,
       "tipo": "cidade",
       "titulo": "Itumbiara — GO",
-      "texto": "Às margens do rio Paranaíba, divisa GO/MG. Importante entroncamento da BR-153 rumo ao Triângulo Mineiro.",
+      "texto": "Divisa GO/MG no rio Paranaíba, entroncamento da BR-153.",
       "destaque": "Divisa GO/MG",
-      "duracao_ms": 4000
+      "duracao_ms": 4200
     },
     {
       "progress": 0.45,
       "tipo": "cidade",
       "titulo": "Uberlândia — MG",
-      "texto": "Segunda maior cidade de Minas, polo de logística e agronegócio. O Parque do Sabiá é a atração mais family-friendly da rota.",
-      "destaque": "Parque do Sabiá",
-      "duracao_ms": 4500
+      "texto": "2ª maior de Minas e polo do agro. Parque do Sabiá para a família.",
+      "destaque": "Polo do agro",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.55,
       "tipo": "cidade",
       "titulo": "Uberaba — MG",
-      "texto": "Capital do zebu e dos fósseis (Peirópolis). Mercado Municipal histórico e arte sacra no centro.",
-      "destaque": "Dinossauros & queijos",
-      "duracao_ms": 4500
+      "texto": "Terra do zebu e dos fósseis. Mercado Municipal histórico.",
+      "destaque": "Zebu & fósseis",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.68,
       "tipo": "cidade",
       "titulo": "Araxá — MG",
-      "texto": "Cidade das águas sulfurosas e do queijo premiado. O Grande Hotel e Termas é ícone Art Déco. Entrada da BR-262 rumo a BH.",
-      "destaque": "Termas & melhor queijo do mundo",
-      "duracao_ms": 4500
+      "texto": "Águas termais e o queijo premiado. Entrada da BR-262.",
+      "destaque": "Termas & queijo",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.82,
       "tipo": "cidade",
       "titulo": "Bom Despacho — MG",
-      "texto": "Entroncamento da BR-262 no Centro-Oeste mineiro, última grande parada antes de Belo Horizonte.",
-      "destaque": "Reta final para BH",
-      "duracao_ms": 4000
+      "texto": "Entroncamento da BR-262, última parada antes de BH.",
+      "destaque": "Reta final",
+      "duracao_ms": 4200
     }
   ],
   "trechos": [

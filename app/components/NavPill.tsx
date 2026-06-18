@@ -2,7 +2,7 @@
 
 import { COR_PRIMARIA } from "../data";
 
-export type TabId = "exploracao" | "roteiro" | "usuarios";
+export type TabId = "exploracao" | "roteiro" | "usuarios" | "responsaveis";
 
 interface Props {
   ativa: TabId | null;
@@ -43,6 +43,16 @@ const TABS: { id: TabId; label: string; icon: React.ReactNode }[] = [
         <path d="M3 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         <circle cx="18" cy="7" r="2" stroke="currentColor" strokeWidth="2"/>
         <path d="M21 20c0-2.21-1.343-4.105-3.25-4.785" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  {
+    id: "responsaveis",
+    label: "Responsáveis",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+        <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },

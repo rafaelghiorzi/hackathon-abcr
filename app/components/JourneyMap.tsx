@@ -85,7 +85,12 @@ export default function JourneyMap({
       const coords = rota.coords as [number, number][];
       const fontEventos = rota.perfis[perfil] ?? Object.values(rota.perfis)[0] ?? [];
       const cidades = rota.cidades ?? [];
-      const eventos = [...fontEventos, ...cidades].sort((a, b) => a.progress - b.progress);
+      // Evita redundância: se o perfil já tem um card da cidade (ex.: "Uberaba: …"),
+      // não mostramos também o card genérico "Uberaba — MG".
+      const local = (t: string) => t.split(/[—:]/)[0].trim().toLowerCase();
+      const locaisDoPerfil = new Set(fontEventos.map((e) => local(e.titulo)));
+      const cidadesUnicas = cidades.filter((c) => !locaisDoPerfil.has(local(c.titulo)));
+      const eventos = [...fontEventos, ...cidadesUnicas].sort((a, b) => a.progress - b.progress);
       const paradas = PARADAS_POR_ROTA[rotaId] ?? [];
 
       const cum: number[] = [0];

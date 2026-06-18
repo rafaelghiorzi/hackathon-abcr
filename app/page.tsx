@@ -5,6 +5,7 @@ import ChatInput from "./components/ChatInput";
 import ExploreMap from "./components/ExploreMap";
 import JourneyMap from "./components/JourneyMap";
 import NavPill, { type TabId } from "./components/NavPill";
+import Concessionarias from "./components/Concessionarias";
 import RotasUsuarios from "./components/RotasUsuarios";
 import RotaTimelineModal from "./components/RotaTimelineModal";
 import ShareCard from "./components/ShareCard";
@@ -17,7 +18,7 @@ import {
   type Evento, type EventoTipo, type PerfilViagem,
 } from "./data";
 
-type Tela = "entrada" | "roteiro" | "compartilhar" | "exploracao" | "usuarios";
+type Tela = "entrada" | "roteiro" | "compartilhar" | "exploracao" | "usuarios" | "responsaveis";
 
 const TIPOS_SECUNDARIOS: EventoTipo[] = ["curiosidade", "concessionaria", "seguranca", "logistica"];
 
@@ -25,6 +26,7 @@ function telaParaTab(tela: Tela): TabId | null {
   if (tela === "exploracao") return "exploracao";
   if (tela === "roteiro" || tela === "compartilhar") return "roteiro";
   if (tela === "usuarios") return "usuarios";
+  if (tela === "responsaveis") return "responsaveis";
   return null;
 }
 
@@ -60,6 +62,7 @@ export default function Home() {
       // Leaflet precisa recalcular tamanho após display:none → display:flex
       requestAnimationFrame(() => window.dispatchEvent(new Event("resize")));
     } else if (tab === "exploracao") setTela("exploracao");
+    else if (tab === "responsaveis") setTela("responsaveis");
     else setTela("usuarios");
   };
 
@@ -71,7 +74,7 @@ export default function Home() {
     <main className="flex min-h-dvh w-full flex-col items-center bg-gradient-to-b from-white to-[#eef5f8] px-4 py-5 sm:py-7">
       <div className="flex w-full max-w-md flex-1 flex-col">
 
-        {tela !== "exploracao" && tela !== "usuarios" && (
+        {tela !== "exploracao" && tela !== "usuarios" && tela !== "responsaveis" && (
           <div className="anim-fade mb-4 flex items-center gap-2.5">
             <span
               className="flex h-8 w-8 items-center justify-center rounded-xl shadow-[0_4px_12px_rgba(12,102,127,0.3)]"
@@ -247,6 +250,11 @@ export default function Home() {
         {/* Tela 5 — rotas dos usuários */}
         {tela === "usuarios" && (
           <RotasUsuarios onVoltar={voltar} />
+        )}
+
+        {/* Tela 6 — responsáveis (concessionárias) */}
+        {tela === "responsaveis" && (
+          <Concessionarias onVoltar={voltar} rotasPercorridas={rotasPercorridas} />
         )}
       </div>
 

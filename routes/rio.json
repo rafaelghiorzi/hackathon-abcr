@@ -13,160 +13,192 @@
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 monitorada de ponta a ponta",
-        "texto": "Os 1.180 km até o Rio são cobertos por três concessionárias — Via Cristais, EPR Via Mineira e Elovias. Juntas mantêm SAU 24h, ambulâncias e guincho gratuito. Viajar com crianças fica mais tranquilo: socorro contratual chega rápido em qualquer trecho.",
-        "destaque": "SAU 24h nas 3 concessões",
-        "duracao_ms": 6000
+        "titulo": "BR-040: três concessionárias, zero preocupação",
+        "texto": "1.180 km com SAU 24h, ambulância e guincho grátis. Viajar com crianças fica tranquilo.",
+        "destaque": "Socorro 24h o tempo todo",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.22,
         "tipo": "parada",
-        "titulo": "Cristalina — caça aos cristais",
-        "texto": "As bancas de pedras à beira da BR-040 viram brincadeira: a garotada adora escolher ametistas e quartzos de verdade. Parada curta, banheiro limpo e lanche antes de seguir. Daqui a Via Cristais cuida da estrada pelos próximos 594 km.",
-        "destaque": "Pedras de verdade · parada rápida",
-        "duracao_ms": 5000
+        "titulo": "Cristalina: caça aos cristais",
+        "texto": "Ametistas de verdade nas bancas da pista. Parada rápida e divertida.",
+        "destaque": "Pedras de verdade",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.5,
+        "progress": 0.45,
         "tipo": "seguranca",
-        "titulo": "Faixas novas, viagem segura",
-        "texto": "A EPR Via Mineira já requalificou 500 km de faixas e restaurou 66 pontes e viadutos no trecho mineiro. Pista boa e sinalização nova significam menos sustos no banco de trás. Câmeras e painéis avisam sobre cada imprevisto adiante.",
-        "destaque": "500 km de faixas requalificadas",
-        "duracao_ms": 5500
+        "titulo": "Pista nova, menos sustos",
+        "texto": "A EPR Via Mineira refez 500 km de faixas e 66 pontes. Estrada lisa, criança dormindo.",
+        "destaque": "500 km de pista nova",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.7,
         "tipo": "parada",
-        "titulo": "Juiz de Fora — esticar as pernas",
-        "texto": "Boa cidade para uma pausa em família: praças arborizadas, parques e shoppings logo na saída da rodovia. Ótimo ponto para almoçar e deixar a criançada gastar energia antes da descida da serra.",
+        "titulo": "Juiz de Fora: hora do recreio",
+        "texto": "Parques e praças na saída da rodovia para esticar as pernas.",
         "destaque": "Pausa family-friendly",
-        "duracao_ms": 5000
+        "duracao_ms": 4800
       },
       {
         "progress": 0.88,
         "tipo": "parada",
-        "titulo": "Petrópolis — história que vira aventura",
-        "texto": "O Museu Imperial e a Casa de Santos Dumont encantam as crianças — coroa de imperador e a casa do inventor do avião! A Elovias está duplicando a Serra de Petrópolis (de 4 para 6 faixas), deixando a subida mais segura.",
-        "destaque": "Museu Imperial · Santos Dumont",
-        "duracao_ms": 5500
+        "titulo": "Petrópolis: museu vira aventura",
+        "texto": "Museu Imperial e a casa de Santos Dumont encantam a criançada.",
+        "destaque": "Cidade Imperial",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.95,
+        "tipo": "seguranca",
+        "titulo": "Serra mais segura",
+        "texto": "A Elovias amplia a Serra de Petrópolis de 4 para 6 faixas. Descida sem aperto.",
+        "destaque": "Serra 4→6 faixas",
+        "duracao_ms": 4800
       }
     ],
     "rapida": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 — eixo direto ao litoral",
-        "texto": "A rota mais rápida de Brasília ao Rio é a BR-040 inteira. A Via Cristais investe R$ 12 bi em 30 anos, com 168 km de faixas adicionais para manter o fluxo. Menos comboios atrás de caminhão, mais quilômetros rodados por hora.",
-        "destaque": "Via Cristais · R$ 12 bi",
-        "duracao_ms": 5500
+        "titulo": "BR-040: o trajeto direto ao Rio",
+        "texto": "Via Cristais investe R$ 12 bi e 168 km de faixas adicionais. Menos fila atrás de caminhão.",
+        "destaque": "R$ 12 bi · 168 km de faixas",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.35,
+        "progress": 0.3,
         "tipo": "logistica",
-        "titulo": "EPR Via Mineira — pista renovada",
-        "texto": "No primeiro ano (R$ 348 mi investidos) a EPR aplicou 114 mil toneladas de asfalto e requalificou 500 km de faixas entre BH e Juiz de Fora. Piso novo é viagem mais rápida e seguras ultrapassagens.",
-        "destaque": "114 mil t de asfalto novo",
-        "duracao_ms": 5500
+        "titulo": "Asfalto novo é tempo ganho",
+        "texto": "EPR Via Mineira aplicou 114 mil t de asfalto e refez 500 km de faixas.",
+        "destaque": "114 mil t de asfalto",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.5,
+        "tipo": "seguranca",
+        "titulo": "Avisam antes do problema",
+        "texto": "228 câmeras e detecção automática de incidentes evitam que você entre na fila.",
+        "destaque": "228 câmeras 24h",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.65,
         "tipo": "logistica",
-        "titulo": "Elovias — Serra de Petrópolis duplicada",
-        "texto": "O maior gargalo da rota está sendo resolvido: a Elovias amplia a Serra de Petrópolis de 4 para 6 faixas e retoma o túnel que encurta o trajeto Rio–Petrópolis em 5 km. São R$ 8,8 bi para destravar a descida.",
-        "destaque": "Serra: 4 → 6 faixas",
-        "duracao_ms": 5500
+        "titulo": "Serra de Petrópolis duplicada",
+        "texto": "Elovias: de 4 para 6 faixas e um túnel que encurta 5 km. O gargalo do Rio resolvido.",
+        "destaque": "−5 km no trajeto",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.92,
+        "progress": 0.9,
         "tipo": "seguranca",
-        "titulo": "Detecção automática de incidentes",
-        "texto": "Câmeras com detecção automática e painéis de mensagem avisam sobre acidentes antes de você chegar neles, evitando filas. Tecnologia das concessões que transforma imprevisto em desvio planejado.",
-        "destaque": "Menos tempo parado na fila",
-        "duracao_ms": 5000
+        "titulo": "Socorro em minutos",
+        "texto": "SAU com guincho e ambulância contratados em toda a BR-040.",
+        "destaque": "SAU garantido",
+        "duracao_ms": 4800
       }
     ],
     "historico": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 — três concessões, 1.180 km",
-        "texto": "Da Rodovia JK ao litoral, três concessionárias cuidam do caminho: Via Cristais (Cristalina–BH), EPR Via Mineira (BH–Juiz de Fora) e Elovias (até o Rio). Saber quem opera cada trecho ajuda na hora de pedir socorro.",
-        "destaque": "Via Cristais · EPR · Elovias",
-        "duracao_ms": 6000
+        "titulo": "BR-040: a Rodovia JK até o mar",
+        "texto": "Via Cristais, EPR e Elovias cuidam dos 1.180 km — cada trecho com socorro próprio.",
+        "destaque": "3 concessões, 1 estrada",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.2,
-        "tipo": "curiosidade",
-        "titulo": "Cristalina — onde a Via Cristais começa",
-        "texto": "Maior polo de cristais de rocha e ametistas do Brasil. É aqui que a Via Cristais assume os 594 km até BH, com R$ 12 bi previstos em 30 anos. As bancas à beira da estrada vendem pedras genuínas do Cerrado.",
+        "tipo": "parada",
+        "titulo": "Cristalina: capital do cristal",
+        "texto": "Maior polo de ametistas do país. Aqui a Via Cristais assume 594 km.",
         "destaque": "60% dos cristais do Brasil",
-        "duracao_ms": 5500
+        "duracao_ms": 4800
       },
       {
         "progress": 0.45,
         "tipo": "parada",
-        "titulo": "Congonhas — os Profetas de Aleijadinho",
-        "texto": "A poucos quilômetros da BR-040, os Doze Profetas em pedra-sabão de Aleijadinho formam um dos maiores conjuntos barrocos do mundo — Patrimônio da UNESCO. A EPR Via Mineira já anunciou obras de duplicação em Congonhas.",
-        "destaque": "Patrimônio Mundial UNESCO",
-        "duracao_ms": 5500
+        "titulo": "Congonhas: os Profetas de Aleijadinho",
+        "texto": "Doze estátuas barrocas, Patrimônio da UNESCO, a minutos da pista.",
+        "destaque": "Patrimônio Mundial",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.6,
+        "tipo": "seguranca",
+        "titulo": "Estrada Real, acesso restaurado",
+        "texto": "A EPR recuperou 66 pontes e viadutos rumo às cidades históricas.",
+        "destaque": "66 pontes restauradas",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.7,
         "tipo": "pernoite",
-        "titulo": "Juiz de Fora — pernoite recomendado",
-        "texto": "Maior cidade da Zona da Mata, boa estrutura para dormir antes de encarar a serra. Daqui em diante a Elovias assume a BR-040/495 (ex-Concer) rumo ao Rio, com R$ 8,8 bi de investimento já contratados.",
-        "destaque": "Elovias assume daqui ao Rio",
-        "duracao_ms": 6000
+        "titulo": "Juiz de Fora: ponto de parada",
+        "texto": "Boa hotelaria antes da serra. Daqui a Elovias assume até o Rio.",
+        "destaque": "Elovias assume aqui",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.88,
-        "tipo": "curiosidade",
-        "titulo": "Petrópolis — a Cidade Imperial",
-        "texto": "Refúgio de Dom Pedro II, com o Museu Imperial, a Catedral e o Palácio de Cristal. A descida da Serra de Petrópolis, sob a Elovias, está sendo duplicada — a obra mais aguardada da rota.",
-        "destaque": "Corte imperial na serra",
-        "duracao_ms": 5500
+        "tipo": "parada",
+        "titulo": "Petrópolis: a Cidade Imperial",
+        "texto": "O refúgio de Dom Pedro II e o Museu Imperial no alto da serra.",
+        "destaque": "Corte imperial",
+        "duracao_ms": 4800
       }
     ],
     "culinaria": [
       {
         "progress": 0.06,
         "tipo": "concessionaria",
-        "titulo": "BR-040 — áreas de descanso contratuais",
-        "texto": "As concessões da BR-040 preveem áreas de descanso e SAU 24h ao longo de todo o eixo. Comer bem na estrada com segurança faz parte do contrato — pare onde houver apoio da Via Cristais, EPR ou Elovias.",
-        "destaque": "Pausa gastronômica segura",
-        "duracao_ms": 5500
+        "titulo": "BR-040: pare e coma com segurança",
+        "texto": "Áreas de descanso e SAU 24h contratuais em todo o eixo.",
+        "destaque": "Paradas seguras 24h",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.3,
+        "progress": 0.2,
         "tipo": "parada",
-        "titulo": "Cerrado goiano — pamonha e pequi",
-        "texto": "Nas primeiras horas, barracas de beira de estrada vendem pamonha quentinha, pão de queijo e o sabor marcante do pequi. É o aperitivo goiano antes de entrar em Minas.",
-        "destaque": "Pamonha & pão de queijo",
-        "duracao_ms": 5000
+        "titulo": "Cristalina: pamonha e pão de queijo",
+        "texto": "Os primeiros sabores do Cerrado nas bancas de beira de estrada.",
+        "destaque": "Sabor do Cerrado",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.52,
+        "progress": 0.5,
         "tipo": "parada",
-        "titulo": "Cozinha mineira de raiz",
-        "texto": "Entrando em Minas, o feijão-tropeiro, o frango com quiabo e o tutu aparecem nos restaurantes à beira da BR-040. Comida de fogão a lenha que vale a parada — a pista nova da EPR deixa o acesso fácil.",
-        "destaque": "Feijão-tropeiro & tutu",
-        "duracao_ms": 5500
+        "titulo": "Minas no prato",
+        "texto": "Feijão-tropeiro e frango com quiabo nos restaurantes da pista, com acesso fácil pela EPR.",
+        "destaque": "Cozinha mineira",
+        "duracao_ms": 4800
       },
       {
         "progress": 0.68,
         "tipo": "parada",
-        "titulo": "Serras mineiras — queijos e doces",
-        "texto": "Queijo Canastra, doce de leite e goiabada cascão premiados estão à venda nas serras da Zona da Mata. Leve para casa — são produtos com identidade geográfica reconhecida.",
-        "destaque": "Queijo Canastra premiado",
-        "duracao_ms": 5000
+        "titulo": "Serras: queijo e doce",
+        "texto": "Canastra, doce de leite e goiabada premiados à beira da estrada.",
+        "destaque": "Queijo Canastra",
+        "duracao_ms": 4800
       },
       {
-        "progress": 0.9,
-        "tipo": "curiosidade",
-        "titulo": "Chegada ao Rio — sabor carioca",
-        "texto": "Descendo a Serra de Petrópolis (duplicada pela Elovias) chega-se ao Rio: água de coco na praia, feijoada e o melhor pão de queijo virado em pão na chapa. Fim de viagem com gosto bom.",
-        "destaque": "Feijoada & praia",
-        "duracao_ms": 5000
+        "progress": 0.8,
+        "tipo": "concessionaria",
+        "titulo": "Elovias: a serra de Itaipava",
+        "texto": "Cervejarias e fondue na descida, com a pista ampliada para 6 faixas.",
+        "destaque": "Serra gastronômica",
+        "duracao_ms": 4800
+      },
+      {
+        "progress": 0.92,
+        "tipo": "parada",
+        "titulo": "Rio: água de coco e feijoada",
+        "texto": "Fim de viagem com sabor carioca na orla.",
+        "destaque": "Sabor carioca",
+        "duracao_ms": 4800
       }
     ]
   },
@@ -175,49 +207,49 @@
       "progress": 0.19,
       "tipo": "cidade",
       "titulo": "Cristalina — GO",
-      "texto": "Capital nacional do cristal de rocha. As bancas às margens da BR-040 são parada clássica. Daqui a Via Cristais cuida dos próximos 594 km até BH.",
-      "destaque": "~165 km de Brasília",
-      "duracao_ms": 4500
+      "texto": "Capital do cristal de rocha. Via Cristais assume os 594 km até BH.",
+      "destaque": "Polo de ametistas",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.44,
       "tipo": "cidade",
       "titulo": "Congonhas — MG",
-      "texto": "Cidade dos Doze Profetas de Aleijadinho, conjunto barroco Patrimônio da UNESCO. Trecho operado pela EPR Via Mineira, com duplicação anunciada.",
-      "destaque": "Profetas de Aleijadinho",
-      "duracao_ms": 4500
+      "texto": "Os Doze Profetas de Aleijadinho, Patrimônio da UNESCO.",
+      "destaque": "Barroco mineiro",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.53,
       "tipo": "cidade",
       "titulo": "Conselheiro Lafaiete — MG",
-      "texto": "Entroncamento histórico das Minas Gerais, boa estrutura de apoio na BR-040. Porta de entrada para o circuito do ouro.",
-      "destaque": "Coração do ouro mineiro",
-      "duracao_ms": 4000
+      "texto": "Entroncamento histórico do ouro, com apoio na BR-040.",
+      "destaque": "Rota do ouro",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.69,
       "tipo": "cidade",
       "titulo": "Juiz de Fora — MG",
-      "texto": "Maior cidade da Zona da Mata, pernoite recomendado. Aqui a Elovias assume a BR-040/495 rumo ao Rio.",
-      "destaque": "Pernoite · Elovias assume",
-      "duracao_ms": 4500
+      "texto": "Maior cidade da Zona da Mata. Elovias assume rumo ao Rio.",
+      "destaque": "Pernoite ideal",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.8,
       "tipo": "cidade",
       "titulo": "Três Rios — RJ",
-      "texto": "Entrada do Rio de Janeiro pela BR-040, encontro dos rios Paraíba do Sul, Piabanha e Paraibuna. Última parada antes da serra.",
-      "destaque": "Encontro de três rios",
-      "duracao_ms": 4000
+      "texto": "Entrada do Rio, no encontro de três rios. Última parada antes da serra.",
+      "destaque": "Porta do RJ",
+      "duracao_ms": 4200
     },
     {
       "progress": 0.87,
       "tipo": "cidade",
       "titulo": "Petrópolis — RJ",
-      "texto": "A Cidade Imperial, no alto da serra. A Elovias duplica a Serra de Petrópolis de 4 para 6 faixas, a obra mais aguardada do trecho.",
-      "destaque": "Cidade Imperial · serra duplicada",
-      "duracao_ms": 4500
+      "texto": "Cidade Imperial no alto da serra, hoje duplicada pela Elovias.",
+      "destaque": "Serra 4→6 faixas",
+      "duracao_ms": 4200
     }
   ],
   "waypoints": [

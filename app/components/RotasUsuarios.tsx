@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { COR_PRIMARIA, type PontoRota, type RotaDetalhe, type TrechoConcessao } from "../data";
+import { COR_ACENTO_DARK, type PontoRota, type RotaDetalhe, type TrechoConcessao } from "../data";
 import RotaTimelineModal from "./RotaTimelineModal";
 
 const TAG_COLORS: Record<string, string> = {
@@ -122,7 +122,7 @@ export default function RotasUsuarios({ onVoltar }: Props) {
           </svg>
         </button>
         <div>
-          <h2 className="text-lg font-bold text-[#14323d]">Rotas dos Usuários</h2>
+          <h2 className="font-display text-lg font-extrabold tracking-tight text-[#08323d]">Rotas dos Usuários</h2>
           <p className="text-[12px] text-[#9bacb3]">Percursos populares via rodovias concedidas</p>
         </div>
       </div>
@@ -138,17 +138,20 @@ export default function RotasUsuarios({ onVoltar }: Props) {
             {/* Cabeçalho da rota */}
             <div
               className="flex items-center justify-between px-4 py-3"
-              style={{ background: `${r.cor}12` }}
+              style={{ background: "#f3faea", borderLeft: "4px solid #93d22a" }}
             >
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-[#14323d]">{r.origem.nome}</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-[#9bacb3]">
-                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ color: COR_ACENTO_DARK }}>
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
                 <span className="text-sm font-bold text-[#14323d]">{r.destino.nome}</span>
               </div>
-              <span className="rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-bold" style={{ color: r.cor }}>
+              <span className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold text-white" style={{ background: COR_ACENTO_DARK }}>
                 ver rota
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                  <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </span>
             </div>
 
@@ -160,7 +163,7 @@ export default function RotasUsuarios({ onVoltar }: Props) {
                 { valor: `${r.km} km`, label: "percurso" },
               ].map((s, j) => (
                 <div key={j} className="py-2.5 text-center">
-                  <p className="text-[15px] font-bold" style={{ color: COR_PRIMARIA }}>{s.valor}</p>
+                  <p className="text-[15px] font-extrabold" style={{ color: COR_ACENTO_DARK }}>{s.valor}</p>
                   <p className="text-[10px] font-medium text-[#9bacb3]">{s.label}</p>
                 </div>
               ))}
@@ -178,8 +181,8 @@ export default function RotasUsuarios({ onVoltar }: Props) {
                     key={tag}
                     className="rounded-full px-2.5 py-1 text-[10px] font-bold"
                     style={{
-                      background: `${TAG_COLORS[tag] ?? COR_PRIMARIA}15`,
-                      color: TAG_COLORS[tag] ?? COR_PRIMARIA,
+                      background: `${TAG_COLORS[tag] ?? COR_ACENTO_DARK}15`,
+                      color: TAG_COLORS[tag] ?? COR_ACENTO_DARK,
                     }}
                   >
                     {tag}
