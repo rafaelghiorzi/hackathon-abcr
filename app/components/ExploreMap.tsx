@@ -2,12 +2,66 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useEffect, useRef, useState } from "react";
-import { COR_ACENTO, COR_ACENTO_DARK, COR_PRIMARIA, EXPLORACAO_MOCK, ROTAS } from "../data";
+import { COR_ACENTO, COR_ACENTO_DARK, COR_PRIMARIA, EXPLORACAO_MOCK } from "../data";
 
 const TILES = "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
 const LEAFLET_JS = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
 // Bounds do Brasil: SW = [-33.75, -73.98], NE = [5.27, -28.85]
 const BR_BOUNDS: [[number, number], [number, number]] = [[-33.75, -73.98], [5.27, -28.85]];
+
+// Rotas visuais aproximadas saindo de Brasília (traçado pelas rodovias principais)
+const ROTAS_VISUAIS: [number, number][][] = [
+  // Brasília → Rio de Janeiro via BR-040
+  [
+    [-15.7942, -47.8825], // Brasília
+    [-16.7675, -47.6147], // Cristalina GO
+    [-19.2736, -44.4047], // Paraopeba MG
+    [-19.9208, -43.9378], // Belo Horizonte MG
+    [-20.6603, -43.7861], // Conselheiro Lafaiete MG
+    [-21.7642, -43.3503], // Juiz de Fora MG
+    [-22.1167, -43.2089], // Três Rios RJ
+    [-22.5050, -43.1789], // Petrópolis RJ
+    [-22.9068, -43.1729], // Rio de Janeiro
+  ],
+  // Brasília → Manaus via BR-060/070/364/319
+  [
+    [-15.7942, -47.8825], // Brasília
+    [-16.6869, -49.2648], // Goiânia GO
+    [-17.8800, -51.7200], // Jataí GO
+    [-15.8900, -52.2600], // Barra do Garças MT
+    [-15.6010, -56.0974], // Cuiabá MT
+    [-12.7400, -60.1400], // Vilhena RO
+    [-10.8800, -61.9500], // Ji-Paraná RO
+    [-8.7619,  -63.9039], // Porto Velho RO
+    [-5.8100,  -61.3000], // Manicoré AM
+    [-3.1190,  -60.0217], // Manaus AM
+  ],
+  // Brasília → Fortaleza via BR-020/116
+  [
+    [-15.7942, -47.8825], // Brasília
+    [-15.5400, -47.3400], // Formosa GO
+    [-12.1500, -44.9900], // Barreiras BA
+    [-11.3200, -41.8600], // Jacobina BA
+    [-9.3900,  -40.5000], // Juazeiro BA
+    [-8.0700,  -39.1300], // Salgueiro PE
+    [-7.2100,  -39.3200], // Juazeiro do Norte CE
+    [-4.5700,  -37.7700], // Sobral CE
+    [-3.7319,  -38.5267], // Fortaleza CE
+  ],
+  // Brasília → Porto Alegre via BR-050/BR-116
+  [
+    [-15.7942, -47.8825], // Brasília
+    [-16.7675, -47.6147], // Cristalina GO
+    [-18.9180, -48.2760], // Uberlândia MG
+    [-19.7472, -47.9381], // Uberaba MG
+    [-21.1700, -47.8100], // Ribeirão Preto SP
+    [-23.5505, -46.6333], // São Paulo SP
+    [-25.4300, -49.2700], // Curitiba PR
+    [-27.8200, -50.3200], // Lages SC
+    [-29.1700, -51.1800], // Caxias do Sul RS
+    [-30.0346, -51.2177], // Porto Alegre RS
+  ],
+];
 
 function carregarLeaflet(): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -40,9 +94,6 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
   const [erro, setErro] = useState<string | null>(null);
 
   const { estados, cidades, pct_brasil } = EXPLORACAO_MOCK;
-
-  // Rotas a exibir: percorridas pelo usuário + pré-populadas para a demo
-  const todasRotas = [...new Set([...rotasPercorridas, "bh", "rio", "bhtri"])];
 
   useEffect(() => {
     let vivo = true;
@@ -101,19 +152,14 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
         })
         .catch(() => { /* silencioso — mapa funciona sem os estados */ });
 
-      // Rodovias percorridas (desenhadas imediatamente, sem await)
-      todasRotas.forEach((rid) => {
-        const rota = ROTAS[rid];
-        if (!rota?.coords?.length) return;
-        const coords = rota.coords as [number, number][];
-        // Halo branco para contraste com o fill dos estados
+      // 4 rotas visuais saindo de Brasília
+      ROTAS_VISUAIS.forEach((coords) => {
         L.polyline(coords, { color: "#fff", weight: 8, opacity: 0.6, lineJoin: "round", lineCap: "round" }).addTo(map);
-        // Linha azul da rota
         L.polyline(coords, { color: COR_PRIMARIA, weight: 4, opacity: 1, lineJoin: "round", lineCap: "round" }).addTo(map);
-        // Pontinhos de origem e destino
-        L.circleMarker(coords[0], { radius: 5, fillColor: COR_PRIMARIA, color: "#fff", weight: 2, fillOpacity: 1 }).addTo(map);
         L.circleMarker(coords[coords.length - 1], { radius: 5, fillColor: "#14323d", color: "#fff", weight: 2, fillOpacity: 1 }).addTo(map);
       });
+      // Ponto de origem único (Brasília)
+      L.circleMarker(ROTAS_VISUAIS[0][0], { radius: 6, fillColor: COR_PRIMARIA, color: "#fff", weight: 2, fillOpacity: 1 }).addTo(map);
 
       // Cidades descobertas
       cidades.forEach((c) => {

@@ -375,24 +375,14 @@ export interface CidadeExplorada {
 }
 
 export const EXPLORACAO_MOCK = {
-  // Pegada nacional: rotas do eixo central + viagens espalhadas pelo Brasil
-  estados: ["DF", "GO", "MG", "RJ", "SP", "MT", "AL", "BA", "PE", "CE", "AM", "RS"],
+  // Estados cobertos pelas 4 rotas saindo de Brasília
+  estados: ["DF", "GO", "MG", "RJ", "MT", "RO", "AM", "BA", "CE", "SP", "PR", "SC", "RS"],
   cidades: [
-    // Eixo central percorrido
     { nome: "Brasília",       uf: "DF", lat: -15.7942, lng: -47.8825 },
-    { nome: "Belo Horizonte", uf: "MG", lat: -19.9167, lng: -43.9345 },
     { nome: "Rio de Janeiro", uf: "RJ", lat: -22.9068, lng: -43.1729 },
-    { nome: "Uberaba",        uf: "MG", lat: -19.7472, lng: -47.9381 },
-    // Espalhadas pelo Brasil
-    { nome: "Cuiabá",         uf: "MT", lat: -15.6010, lng: -56.0974 },
-    { nome: "Maceió",         uf: "AL", lat: -9.6498,  lng: -35.7089 },
-    { nome: "Salvador",       uf: "BA", lat: -12.9777, lng: -38.5016 },
-    { nome: "Recife",         uf: "PE", lat: -8.0476,  lng: -34.8770 },
-    { nome: "Fortaleza",      uf: "CE", lat: -3.7319,  lng: -38.5267 },
     { nome: "Manaus",         uf: "AM", lat: -3.1190,  lng: -60.0217 },
+    { nome: "Fortaleza",      uf: "CE", lat: -3.7319,  lng: -38.5267 },
     { nome: "Porto Alegre",   uf: "RS", lat: -30.0346, lng: -51.2177 },
-    { nome: "São Paulo",      uf: "SP", lat: -23.5505, lng: -46.6333 },
-    { nome: "Chapada dos Guimarães", uf: "MT", lat: -15.4606, lng: -55.7497 },
   ] as CidadeExplorada[],
-  pct_brasil: 31,
+  pct_brasil: 38,
 };
