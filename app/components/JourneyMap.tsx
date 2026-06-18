@@ -281,13 +281,13 @@ export default function JourneyMap({
         <div className="absolute inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-3">
           <div className="popup-entra w-full max-w-xs rounded-2xl bg-white/95 p-3.5 shadow-[0_16px_44px_rgba(20,50,61,0.30)] backdrop-blur">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full" style={{ background: COR_PRIMARIA }}>
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full" style={{ background: "#93d22a" }}>
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                  <path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M5 12.5l4.5 4.5L19 7.5" stroke="#08323d" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-[#9bacb3]">{RESUMOS[rotaId].destaque}</p>
+                <p className="text-[9px] font-bold uppercase tracking-wider" style={{ color: "#5f9417" }}>{RESUMOS[rotaId].destaque}</p>
                 <h2 className="truncate text-[14px] font-bold leading-tight text-[#14323d]">{RESUMOS[rotaId].titulo}</h2>
               </div>
             </div>

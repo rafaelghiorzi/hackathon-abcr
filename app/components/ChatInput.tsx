@@ -139,12 +139,16 @@ export default function ChatInput({ onRota }: Props) {
     <div className="flex flex-1 flex-col">
       {/* Cabeçalho */}
       <div className="anim-subir mb-6" style={{ animationDelay: "0.05s" }}>
-        <h1 className="text-3xl font-bold leading-tight tracking-tight text-[#14323d] sm:text-4xl">
+        <span className="placa-rodovia mb-4">
+          <span className="ponto-vivo" />
+          Melhores Rodovias
+        </span>
+        <h1 className="font-display text-[42px] font-extrabold leading-[0.95] tracking-tight text-[#08323d] sm:text-5xl">
           Para onde
           <br />
-          vamos?
+          <span className="marca-grifo">vamos?</span>
         </h1>
-        <p className="mt-2 text-[15px] text-[#5b727c]">
+        <p className="mt-3 text-[15px] leading-relaxed text-[#5b727c]">
           Planeje sua viagem e descubra o que as concessionárias constroem no seu caminho.
         </p>
       </div>
@@ -239,10 +243,12 @@ export default function ChatInput({ onRota }: Props) {
               <div className="mt-3 flex gap-2">
                 <button
                   onClick={confirmar}
-                  className="flex-1 rounded-xl py-2.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
-                  style={{ background: COR_PRIMARIA }}
+                  className="btn-siga flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2.5 text-sm"
                 >
                   Ver o caminho
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
                 </button>
                 <button
                   onClick={reiniciar}

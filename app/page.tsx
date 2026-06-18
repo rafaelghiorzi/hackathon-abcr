@@ -19,7 +19,7 @@ import {
 
 type Tela = "entrada" | "roteiro" | "compartilhar" | "exploracao" | "usuarios";
 
-const TIPOS_SECUNDARIOS: EventoTipo[] = ["curiosidade", "concessionaria", "seguranca"];
+const TIPOS_SECUNDARIOS: EventoTipo[] = ["curiosidade", "concessionaria", "seguranca", "logistica"];
 
 function telaParaTab(tela: Tela): TabId | null {
   if (tela === "exploracao") return "exploracao";
@@ -72,14 +72,20 @@ export default function Home() {
       <div className="flex w-full max-w-md flex-1 flex-col">
 
         {tela !== "exploracao" && tela !== "usuarios" && (
-          <div className="anim-fade mb-4 flex items-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ color: COR_PRIMARIA }}>
-              <path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 1 1 13 0C18.5 15.2 12 21 12 21z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
-              <circle cx="12" cy="10.5" r="2.3" fill="currentColor"/>
-            </svg>
-            <span className="text-sm font-bold uppercase tracking-[0.2em]" style={{ color: COR_PRIMARIA }}>
-              Meu Caminho
+          <div className="anim-fade mb-4 flex items-center gap-2.5">
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-xl shadow-[0_4px_12px_rgba(12,102,127,0.3)]"
+              style={{ background: COR_PRIMARIA }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 1 1 13 0C18.5 15.2 12 21 12 21z" stroke="#fff" strokeWidth="2.2" strokeLinejoin="round"/>
+                <circle cx="12" cy="10.5" r="2.3" fill="#93d22a"/>
+              </svg>
             </span>
+            <div className="leading-none">
+              <p className="font-display text-[15px] font-extrabold tracking-tight text-[#08323d]">Meu Caminho</p>
+              <p className="mt-0.5 text-[9.5px] font-bold uppercase tracking-[0.18em] text-[#9bacb3]">Melhores Rodovias</p>
+            </div>
           </div>
         )}
 
@@ -217,11 +223,10 @@ export default function Home() {
                 {rotaConcluida && (
                   <button
                     onClick={() => setVerRota(true)}
-                    className="anim-subir mt-2 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px] font-bold text-white shadow-[0_8px_24px_rgba(12, 102, 127,0.3)] transition-opacity hover:opacity-90"
-                    style={{ background: COR_PRIMARIA }}
+                    className="btn-siga anim-subir mt-2 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px]"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     Visualizar rota
                   </button>

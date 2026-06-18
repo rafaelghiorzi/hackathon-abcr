@@ -137,12 +137,11 @@ export default function RotaTimelineModal({ detalhe, onFechar, onCompartilhar }:
           href={googleMapsRotaCompleta(detalhe)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px] font-bold text-white transition-opacity hover:opacity-90"
-          style={{ background: COR_PRIMARIA }}
+          className="btn-siga flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px]"
         >
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white" />
-            <circle cx="12" cy="9" r="2.5" fill={COR_PRIMARIA} />
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="currentColor" />
+            <circle cx="12" cy="9" r="2.5" fill="#fff" />
           </svg>
           Iniciar viagem completa no Google Maps
         </a>

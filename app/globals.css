@@ -3,15 +3,96 @@
 :root {
   --background: #ffffff;
   --foreground: #14323d;
-  --primary: #0c667f;
+  /* Paleta da marca ABCR "Melhores Rodovias" */
+  --primary: #0c667f;        /* azul */
   --primary-dark: #0a4f63;
+  --accent: #93d22a;         /* verde — energia / "siga" */
+  --accent-dark: #5f9417;    /* verde legível como texto */
+  --ink: #08323d;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-accent: var(--accent);
   --font-sans: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-inter), system-ui, sans-serif;
+}
+
+/* ---- Marca ---- */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+/* Destaque "marca-texto" verde sob palavras-chave do título (placa de rodovia) */
+.marca-grifo {
+  position: relative;
+  display: inline-block;
+  z-index: 0;
+}
+.marca-grifo::after {
+  content: "";
+  position: absolute;
+  left: -0.08em;
+  right: -0.08em;
+  bottom: 0.04em;
+  height: 0.36em;
+  background: var(--accent);
+  border-radius: 3px;
+  z-index: -1;
+  transform: rotate(-1.2deg);
+  animation: grifo 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  transform-origin: left center;
+}
+@keyframes grifo {
+  from { transform: rotate(-1.2deg) scaleX(0); }
+  to   { transform: rotate(-1.2deg) scaleX(1); }
+}
+
+/* Faixa-tarja estilo placa verde de rodovia (eyebrow da marca) */
+.placa-rodovia {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.placa-rodovia .ponto-vivo {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(147, 210, 42, 0.7);
+  animation: vivo 1.8s ease-out infinite;
+}
+@keyframes vivo {
+  0%   { box-shadow: 0 0 0 0 rgba(147, 210, 42, 0.6); }
+  70%  { box-shadow: 0 0 0 6px rgba(147, 210, 42, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(147, 210, 42, 0); }
+}
+
+/* Botão de ação verde "siga" — verde com tinta escura, alto contraste */
+.btn-siga {
+  background: var(--accent);
+  color: var(--ink);
+  font-weight: 800;
+  box-shadow: 0 8px 22px rgba(147, 210, 42, 0.4);
+  transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.15s ease;
+}
+.btn-siga:hover {
+  filter: brightness(1.04);
+  box-shadow: 0 10px 26px rgba(147, 210, 42, 0.5);
+}
+.btn-siga:active {
+  transform: translateY(1px) scale(0.99);
 }
 
 html,
@@ -48,7 +129,7 @@ body {
   border: none;
 }
 
-/* Marcador do veículo: ponto GPS pulsante */
+/* Marcador do veículo: ponto GPS pulsante — verde "siga" sobre a estrada azul */
 .veiculo-pulso {
   position: absolute;
   left: 50%;
@@ -57,7 +138,7 @@ body {
   height: 36px;
   margin: -18px 0 0 -18px;
   border-radius: 50%;
-  background: rgba(12, 102, 127, 0.4);
+  background: rgba(147, 210, 42, 0.45);
   animation: pulso 1.8s ease-out infinite;
 }
 .veiculo-dot {
@@ -68,9 +149,9 @@ body {
   height: 20px;
   margin: -10px 0 0 -10px;
   border-radius: 50%;
-  background: var(--primary);
+  background: var(--accent);
   border: 3px solid #fff;
-  box-shadow: 0 4px 14px rgba(12, 102, 127, 0.55);
+  box-shadow: 0 4px 14px rgba(95, 148, 23, 0.6);
 }
 @keyframes pulso {
   0% {
@@ -182,12 +263,13 @@ body {
   animation: fadeIn 0.5s ease both;
 }
 
-/* Barra de progresso */
+/* Barra de progresso — verde "siga" avançando */
 .barra-trilho {
   background: rgba(12, 102, 127, 0.18);
 }
 .barra-preenchida {
-  background: var(--primary);
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(147, 210, 42, 0.7);
   transition: width 0.12s linear;
 }
 
