@@ -6,7 +6,7 @@ import path from "node:path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROUTES_DIR = path.join(__dirname, "routes");
-const ARQUIVOS = ["bh.json", "rio.json"];
+const ARQUIVOS = ["bh.json", "rio.json", "bh-triangulo.json"];
 
 async function fetchOSRM(url, tentativas = 3) {
   for (let t = 0; t < tentativas; t++) {

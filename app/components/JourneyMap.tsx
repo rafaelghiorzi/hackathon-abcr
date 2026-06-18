@@ -35,25 +35,16 @@ export default function JourneyMap({
   rotaId,
   perfil = "historico",
   onVoltar,
-  onVerRota,
   onConcluida,
   onEvento,
 }: {
   rotaId: string;
   perfil?: string;
   onVoltar: () => void;
-  onVerRota?: () => void;
   onConcluida?: () => void;
   onEvento?: (ev: Evento) => void;
 }) {
   const rota = ROTAS[rotaId];
-  const _destCoord = rota.coords.length > 0 ? rota.coords[rota.coords.length - 1] : null;
-  const wazeUrl = _destCoord
-    ? `https://waze.com/ul?ll=${_destCoord[0]},${_destCoord[1]}&navigate=yes`
-    : "#";
-  const googleMapsUrl = _destCoord
-    ? `https://www.google.com/maps/dir/?api=1&destination=${_destCoord[0]},${_destCoord[1]}&travelmode=driving`
-    : "#";
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<any>(null);
   const autoSeguirRef = useRef(true);
@@ -92,7 +83,7 @@ export default function JourneyMap({
 
     function iniciar(L: any) {
       const coords = rota.coords as [number, number][];
-      const fontEventos = rota.perfis[perfil] ?? rota.perfis["historico"] ?? [];
+      const fontEventos = rota.perfis[perfil] ?? Object.values(rota.perfis)[0] ?? [];
       const cidades = rota.cidades ?? [];
       const eventos = [...fontEventos, ...cidades].sort((a, b) => a.progress - b.progress);
       const paradas = PARADAS_POR_ROTA[rotaId] ?? [];
@@ -285,69 +276,21 @@ export default function JourneyMap({
         </div>
       )}
 
-      {/* Resumo */}
+      {/* Resumo — celebração compacta da chegada (ações ficam abaixo, na página) */}
       {resumo && (
-        <div className="absolute inset-0 z-40 flex items-end justify-center pb-6 bg-[#14323d]/30 backdrop-blur-[2px]">
-          <div className="popup-entra w-full max-w-xs rounded-3xl bg-white p-5 shadow-[0_24px_70px_rgba(20,50,61,0.35)] mx-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ background: COR_PRIMARIA }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+        <div className="absolute inset-x-0 bottom-0 z-40 flex justify-center px-3 pb-3">
+          <div className="popup-entra w-full max-w-xs rounded-2xl bg-white/95 p-3.5 shadow-[0_16px_44px_rgba(20,50,61,0.30)] backdrop-blur">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full" style={{ background: COR_PRIMARIA }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
                   <path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
               <div className="min-w-0">
-                <p className="text-[10px] font-semibold uppercase tracking-wider text-[#9bacb3]">{RESUMOS[rotaId].destaque}</p>
-                <h2 className="text-[15px] font-bold leading-tight text-[#14323d]">{RESUMOS[rotaId].titulo}</h2>
+                <p className="text-[9px] font-semibold uppercase tracking-wider text-[#9bacb3]">{RESUMOS[rotaId].destaque}</p>
+                <h2 className="truncate text-[14px] font-bold leading-tight text-[#14323d]">{RESUMOS[rotaId].titulo}</h2>
               </div>
             </div>
-
-            <div className="mb-3 rounded-2xl bg-[#f3f8fa] px-3 py-2">
-              <p className="text-[12px] leading-relaxed text-[#5b727c]">{RESUMOS[rotaId].texto}</p>
-            </div>
-
-            {onVerRota && (
-              <button
-                onClick={onVerRota}
-                className="flex w-full items-center justify-center gap-2 rounded-2xl py-2.5 text-[13px] font-bold text-white hover:opacity-90"
-                style={{ background: COR_PRIMARIA }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Ver rota completa
-              </button>
-            )}
-
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <a
-                href={wazeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 rounded-2xl border border-[#dbe7ec] py-2.5 text-[12px] font-bold text-[#14323d] hover:bg-[#f3f8fa]"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill={COR_PRIMARIA}/>
-                  <circle cx="12" cy="9" r="2.5" fill="white"/>
-                </svg>
-                Vamos rodar!
-              </a>
-              <a
-                href={googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 rounded-2xl border border-[#dbe7ec] py-2.5 text-[12px] font-bold text-[#5b727c] hover:bg-[#f3f8fa]"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#5b727c" strokeWidth="1.8" fill="none"/>
-                  <circle cx="12" cy="9" r="2.2" stroke="#5b727c" strokeWidth="1.8"/>
-                </svg>
-                Google Maps
-              </a>
-            </div>
-
-            <button onClick={onVoltar} className="mt-2 w-full rounded-2xl border border-[#e6edf0] py-2.5 text-[13px] font-semibold text-[#14323d] hover:bg-[#f3f8fa]">
-              Escolher outro destino
-            </button>
           </div>
         </div>
       )}

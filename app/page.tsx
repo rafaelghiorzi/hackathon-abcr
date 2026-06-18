@@ -6,9 +6,12 @@ import ExploreMap from "./components/ExploreMap";
 import JourneyMap from "./components/JourneyMap";
 import NavPill, { type TabId } from "./components/NavPill";
 import RotasUsuarios from "./components/RotasUsuarios";
+import RotaTimelineModal from "./components/RotaTimelineModal";
 import ShareCard from "./components/ShareCard";
 import {
   COR_PRIMARIA,
+  montarRotaDetalhe,
+  resolveRotaId,
   ROTAS, TIPO_INFO,
   TIPOS_VIAGEM,
   type Evento, type EventoTipo, type PerfilViagem,
@@ -36,7 +39,7 @@ export default function Home() {
   const [verRota, setVerRota] = useState(false);
 
   const irParaRota = (id: string, perf: PerfilViagem) => {
-    setRotaId(id);
+    setRotaId(resolveRotaId(id, perf));
     setPerfil(perf);
     setEventos([]);
     setAnimando(false);
@@ -62,9 +65,7 @@ export default function Home() {
 
   const rota = rotaId ? ROTAS[rotaId] : null;
   const tipoViagem = TIPOS_VIAGEM.find((t) => t.id === perfil);
-  const _rotaDest = rota && rota.coords.length > 0 ? rota.coords[rota.coords.length - 1] : null;
-  const rotaWazeUrl = _rotaDest ? `https://waze.com/ul?ll=${_rotaDest[0]},${_rotaDest[1]}&navigate=yes` : "#";
-  const rotaGoogleUrl = _rotaDest ? `https://www.google.com/maps/dir/?api=1&destination=${_rotaDest[0]},${_rotaDest[1]}&travelmode=driving` : "#";
+  const rotaDetalhe = rotaId ? montarRotaDetalhe(rotaId) : null;
 
   return (
     <main className="flex min-h-dvh w-full flex-col items-center bg-gradient-to-b from-white to-[#eef5f8] px-4 py-5 sm:py-7">
@@ -102,7 +103,7 @@ export default function Home() {
             <div className="anim-subir mb-3 flex items-center gap-2 rounded-2xl border border-[#e2ecf0] bg-white p-2.5 shadow-[0_6px_24px_rgba(20,50,61,0.05)]">
               <span
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold"
-                style={{ background: "rgba(37,150,190,0.1)", color: COR_PRIMARIA }}
+                style={{ background: "rgba(12, 102, 127,0.1)", color: COR_PRIMARIA }}
               >
                 {rota.uf}
               </span>
@@ -115,7 +116,7 @@ export default function Home() {
               {tipoViagem && (
                 <span
                   className="shrink-0 rounded-xl px-2.5 py-1 text-[10px] font-bold"
-                  style={{ background: "rgba(37,150,190,0.1)", color: COR_PRIMARIA }}
+                  style={{ background: "rgba(12, 102, 127,0.1)", color: COR_PRIMARIA }}
                 >
                   {tipoViagem.rotulo}
                 </span>
@@ -140,7 +141,6 @@ export default function Home() {
                 rotaId={rotaId}
                 perfil={perfil}
                 onVoltar={voltar}
-                onVerRota={() => setVerRota(true)}
                 onConcluida={() => {
                   setRotaConcluida(true);
                   setRotasPercorridas((p) => [...new Set([...p, rotaId])]);
@@ -159,7 +159,7 @@ export default function Home() {
                   <span /><span /><span />
                 </div>
                 <p className="text-[12px] text-[#9bacb3]">
-                  {perfil === "negocios" ? "Calculando logística da rota…" : "Buscando paradas e curiosidades…"}
+                  {perfil === "rapida" ? "Calculando o trajeto mais rápido…" : "Buscando paradas e curiosidades…"}
                 </p>
               </div>
             )}
@@ -212,6 +212,20 @@ export default function Home() {
                     </div>
                   );
                 })}
+
+                {/* Botão de visualizar rota — aparece ao fim da animação e dos cards */}
+                {rotaConcluida && (
+                  <button
+                    onClick={() => setVerRota(true)}
+                    className="anim-subir mt-2 flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[14px] font-bold text-white shadow-[0_8px_24px_rgba(12, 102, 127,0.3)] transition-opacity hover:opacity-90"
+                    style={{ background: COR_PRIMARIA }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    Visualizar rota
+                  </button>
+                )}
               </div>
             )}
 
@@ -231,113 +245,13 @@ export default function Home() {
         )}
       </div>
 
-      {/* Modal: Ver rota completa */}
-      {verRota && rota && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white">
-          {/* Header */}
-          <div className="flex shrink-0 items-center gap-3 border-b border-[#eef2f4] px-4 py-4">
-            <button
-              onClick={() => setVerRota(false)}
-              className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#e2ecf0] bg-white text-[#5b727c] shadow-[0_2px_8px_rgba(20,50,61,0.06)]"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <path d="M19 12H5M11 6l-6 6 6 6" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-[#9bacb3]">{rota.origem} → {rota.destino}</p>
-              <h2 className="text-[15px] font-bold text-[#14323d]">Sua jornada</h2>
-            </div>
-            <div className="shrink-0 text-right">
-              <p className="text-[13px] font-bold" style={{ color: COR_PRIMARIA }}>{rota.distancia_km.toLocaleString("pt-BR")} km</p>
-              <p className="text-[10px] text-[#9bacb3]">{eventos.length} marcos</p>
-            </div>
-          </div>
-
-          {/* Lista de eventos */}
-          <div className="flex-1 overflow-y-auto px-4 py-4">
-            <div className="flex flex-col gap-2 max-w-md mx-auto">
-              {eventos.map((ev, i) => {
-                const info = TIPO_INFO[ev.tipo];
-                const secundario = TIPOS_SECUNDARIOS.includes(ev.tipo);
-                if (secundario) {
-                  return (
-                    <div key={i} className="flex items-start gap-2.5 px-1 py-1">
-                      <div className="mt-[5px] h-2 w-2 shrink-0 rounded-full" style={{ background: info.cor, opacity: 0.7 }} />
-                      <p className="text-[12px] leading-relaxed text-[#8fa3ab]">
-                        <span className="font-semibold" style={{ color: info.cor }}>{ev.titulo}</span>
-                        {" — "}{ev.texto}
-                      </p>
-                    </div>
-                  );
-                }
-                return (
-                  <div
-                    key={i}
-                    className="timeline-item rounded-2xl border border-[#e8f0f3] bg-white p-3 shadow-[0_2px_8px_rgba(20,50,61,0.04)]"
-                    style={{ "--tipo-cor": info.cor } as React.CSSProperties}
-                  >
-                    <span
-                      className="mb-1 inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide"
-                      style={{ background: `${info.cor}18`, color: info.cor }}
-                    >
-                      <span className="inline-block h-1.5 w-1.5 rounded-full" style={{ background: info.cor }} />
-                      {info.rotulo}
-                    </span>
-                    <p className="text-[13px] font-bold leading-tight text-[#14323d]">{ev.titulo}</p>
-                    <p className="mt-0.5 text-[11.5px] leading-relaxed text-[#5b727c]">{ev.texto}</p>
-                    <div
-                      className="mt-1.5 inline-block rounded-xl px-2.5 py-1 text-[10.5px] font-bold"
-                      style={{ background: `${info.cor}15`, color: info.cor }}
-                    >
-                      {ev.destaque}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Rodapé: navegar + compartilhar */}
-          <div className="shrink-0 border-t border-[#eef2f4] px-4 py-4 max-w-md mx-auto w-full flex flex-col gap-2">
-            <div className="grid grid-cols-2 gap-2">
-              <a
-                href={rotaWazeUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 rounded-2xl py-2.5 text-[13px] font-bold text-white hover:opacity-90"
-                style={{ background: COR_PRIMARIA }}
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="white"/>
-                  <circle cx="12" cy="9" r="2.5" fill={COR_PRIMARIA}/>
-                </svg>
-                Vamos rodar!
-              </a>
-              <a
-                href={rotaGoogleUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1.5 rounded-2xl border border-[#dbe7ec] py-2.5 text-[13px] font-bold text-[#5b727c] hover:bg-[#f3f8fa]"
-              >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="#5b727c" strokeWidth="1.8" fill="none"/>
-                  <circle cx="12" cy="9" r="2.2" stroke="#5b727c" strokeWidth="1.8"/>
-                </svg>
-                Google Maps
-              </a>
-            </div>
-            <button
-              onClick={() => { setVerRota(false); setTela("compartilhar"); }}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl py-2.5 text-[13px] font-semibold text-[#5b727c] border border-[#dbe7ec] hover:bg-[#f3f8fa]"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Compartilhar rota
-            </button>
-          </div>
-        </div>
+      {/* Modal: Ver rota completa (timeline) */}
+      {verRota && rotaDetalhe && (
+        <RotaTimelineModal
+          detalhe={rotaDetalhe}
+          onFechar={() => setVerRota(false)}
+          onCompartilhar={() => { setVerRota(false); setTela("compartilhar"); }}
+        />
       )}
 
       {/* Share overlay */}

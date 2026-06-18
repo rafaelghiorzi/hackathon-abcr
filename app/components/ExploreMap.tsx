@@ -42,7 +42,7 @@ export default function ExploreMap({ onVoltar, rotasPercorridas = [] }: Props) {
   const { estados, cidades, pct_brasil } = EXPLORACAO_MOCK;
 
   // Rotas a exibir: percorridas pelo usuário + pré-populadas para a demo
-  const todasRotas = [...new Set([...rotasPercorridas, "bh", "rio"])];
+  const todasRotas = [...new Set([...rotasPercorridas, "bh", "rio", "bhtri"])];
 
   useEffect(() => {
     let vivo = true;

@@ -3,8 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #14323d;
-  --primary: #2596be;
-  --primary-dark: #1d7a9c;
+  --primary: #0c667f;
+  --primary-dark: #0a4f63;
 }
 
 @theme inline {
@@ -57,7 +57,7 @@ body {
   height: 36px;
   margin: -18px 0 0 -18px;
   border-radius: 50%;
-  background: rgba(37, 150, 190, 0.4);
+  background: rgba(12, 102, 127, 0.4);
   animation: pulso 1.8s ease-out infinite;
 }
 .veiculo-dot {
@@ -70,7 +70,7 @@ body {
   border-radius: 50%;
   background: var(--primary);
   border: 3px solid #fff;
-  box-shadow: 0 4px 14px rgba(37, 150, 190, 0.55);
+  box-shadow: 0 4px 14px rgba(12, 102, 127, 0.55);
 }
 @keyframes pulso {
   0% {
@@ -184,7 +184,7 @@ body {
 
 /* Barra de progresso */
 .barra-trilho {
-  background: rgba(37, 150, 190, 0.18);
+  background: rgba(12, 102, 127, 0.18);
 }
 .barra-preenchida {
   background: var(--primary);
@@ -201,7 +201,7 @@ body {
   border-radius: 50%;
   background: #fff;
   border: 2.5px solid var(--primary);
-  box-shadow: 0 2px 6px rgba(37, 150, 190, 0.4);
+  box-shadow: 0 2px 6px rgba(12, 102, 127, 0.4);
   position: absolute;
   left: -5px;
   top: -5px;
@@ -239,7 +239,7 @@ body {
 
 /* ---- Timeline de eventos (abaixo do mapa) ---- */
 .timeline-item {
-  border-left: 3px solid var(--tipo-cor, #2596be);
+  border-left: 3px solid var(--tipo-cor, #0c667f);
   animation: subir 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -272,7 +272,7 @@ body {
   border-radius: 50%;
   background: var(--primary);
   border: 2px solid #fff;
-  box-shadow: 0 2px 6px rgba(37, 150, 190, 0.5);
+  box-shadow: 0 2px 6px rgba(12, 102, 127, 0.5);
   position: absolute;
   left: -4.5px;
   top: -4.5px;
