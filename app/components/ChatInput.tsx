@@ -1,20 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { COR_PRIMARIA, DESTINOS_POR_ORIGEM, ORIGENS, type CidadeOpcao } from "../data";
+import {
+  COR_PRIMARIA,
+  DESTINOS_POR_ORIGEM,
+  ORIGENS,
+  TIPOS_VIAGEM,
+  type CidadeOpcao,
+  type PerfilViagem,
+} from "../data";
+
+type TipoViagem = typeof TIPOS_VIAGEM[number];
 
 interface Props {
-  onRota: (rotaId: string) => void;
+  onRota: (rotaId: string, perfil: PerfilViagem) => void;
   onExplorar: () => void;
   rotaConcluida?: boolean;
 }
 
-type Etapa = "origem" | "destino" | "confirmando";
+type Etapa = "origem" | "destino" | "perfil" | "confirmando";
 
 export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }: Props) {
   const [etapa, setEtapa] = useState<Etapa>("origem");
   const [origem, setOrigem] = useState<CidadeOpcao | null>(null);
   const [destino, setDestino] = useState<(CidadeOpcao & { rotaId: string }) | null>(null);
+  const [tipoViagem, setTipoViagem] = useState<TipoViagem | null>(null);
 
   const escolherOrigem = (o: CidadeOpcao) => {
     setOrigem(o);
@@ -23,16 +33,22 @@ export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }:
 
   const escolherDestino = (d: CidadeOpcao & { rotaId: string }) => {
     setDestino(d);
+    setEtapa("perfil");
+  };
+
+  const escolherPerfil = (tp: TipoViagem) => {
+    setTipoViagem(tp);
     setEtapa("confirmando");
   };
 
   const confirmar = () => {
-    if (destino) onRota(destino.rotaId);
+    if (destino && tipoViagem) onRota(destino.rotaId, tipoViagem.id);
   };
 
   const reiniciar = () => {
     setOrigem(null);
     setDestino(null);
+    setTipoViagem(null);
     setEtapa("origem");
   };
 
@@ -55,9 +71,12 @@ export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }:
       {/* Bolhas de chat */}
       <div className="flex flex-1 flex-col gap-4">
 
-        {/* Mensagem do app */}
+        {/* Pergunta do app */}
         <div className="anim-subir flex gap-2.5" style={{ animationDelay: "0.15s" }}>
-          <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full" style={{ background: COR_PRIMARIA }}>
+          <div
+            className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full"
+            style={{ background: COR_PRIMARIA }}
+          >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
               <path d="M12 21s-6.5-5.8-6.5-10.5a6.5 6.5 0 1 1 13 0C18.5 15.2 12 21 12 21z" stroke="#fff" strokeWidth="2.2" strokeLinejoin="round"/>
               <circle cx="12" cy="10.5" r="2.3" fill="#fff"/>
@@ -65,14 +84,15 @@ export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }:
           </div>
           <div className="rounded-2xl rounded-tl-sm bg-white px-4 py-3 shadow-[0_4px_16px_rgba(20,50,61,0.08)] border border-[#e8f0f3]">
             <p className="text-[14px] font-medium text-[#14323d]">
-              {etapa === "origem" && "De onde você vai partir?"}
-              {etapa === "destino" && `Certo! E qual é o seu destino?`}
+              {etapa === "origem"      && "De onde você vai partir?"}
+              {etapa === "destino"     && "Certo! E qual é o seu destino?"}
+              {etapa === "perfil"      && "Como você quer viajar?"}
               {etapa === "confirmando" && "Vamos lá?"}
             </p>
           </div>
         </div>
 
-        {/* Resposta — seleção de origem */}
+        {/* Seleção de origem */}
         {etapa === "origem" && (
           <div className="anim-subir ml-9 flex flex-col gap-2" style={{ animationDelay: "0.28s" }}>
             {ORIGENS.map((o) => (
@@ -93,7 +113,7 @@ export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }:
           </div>
         )}
 
-        {/* Bolha de resposta do usuário — origem escolhida */}
+        {/* Bolha: origem escolhida */}
         {origem && etapa !== "origem" && (
           <div className="anim-fade flex justify-end">
             <div
@@ -126,8 +146,8 @@ export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }:
           </div>
         )}
 
-        {/* Bolha de resposta do usuário — destino escolhido */}
-        {destino && etapa === "confirmando" && (
+        {/* Bolha: destino escolhido */}
+        {destino && (etapa === "perfil" || etapa === "confirmando") && (
           <div className="anim-fade flex justify-end">
             <div
               className="rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm font-semibold text-white"
@@ -138,16 +158,54 @@ export default function ChatInput({ onRota, onExplorar, rotaConcluida = false }:
           </div>
         )}
 
+        {/* Seleção de tipo de viagem */}
+        {etapa === "perfil" && (
+          <div className="anim-subir ml-9 flex flex-col gap-2" style={{ animationDelay: "0.1s" }}>
+            {TIPOS_VIAGEM.map((tp) => (
+              <button
+                key={tp.id}
+                onClick={() => escolherPerfil(tp)}
+                className="flex items-center gap-3 rounded-2xl border border-[#e2ecf0] bg-white px-4 py-3 text-left shadow-[0_4px_14px_rgba(20,50,61,0.06)] transition-all hover:border-[#2596be] hover:shadow-[0_6px_20px_rgba(37,150,190,0.15)] active:scale-[0.98]"
+              >
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[10px] font-extrabold"
+                  style={{ background: "rgba(37,150,190,0.1)", color: COR_PRIMARIA }}
+                >
+                  {tp.abrev}
+                </span>
+                <div>
+                  <p className="font-semibold text-[#14323d]">{tp.rotulo}</p>
+                  <p className="text-[11px] text-[#9bacb3]">{tp.desc}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Bolha: tipo de viagem escolhido */}
+        {tipoViagem && etapa === "confirmando" && (
+          <div className="anim-fade flex justify-end">
+            <div
+              className="rounded-2xl rounded-tr-sm px-4 py-2.5 text-sm font-semibold text-white"
+              style={{ background: COR_PRIMARIA }}
+            >
+              {tipoViagem.rotulo}
+            </div>
+          </div>
+        )}
+
         {/* Confirmação */}
-        {etapa === "confirmando" && origem && destino && (
+        {etapa === "confirmando" && origem && destino && tipoViagem && (
           <div className="anim-subir ml-9" style={{ animationDelay: "0.15s" }}>
             <div className="rounded-2xl rounded-tl-sm border border-[#e8f0f3] bg-white px-4 py-3 shadow-[0_4px_16px_rgba(20,50,61,0.08)]">
               <p className="text-sm text-[#5b727c]">
                 Rota de{" "}
                 <span className="font-semibold text-[#14323d]">{origem.nome}</span>
                 {" "}até{" "}
-                <span className="font-semibold text-[#14323d]">{destino.nome}</span>{" "}
-                via rodovias concedidas. Pronto para partir?
+                <span className="font-semibold text-[#14323d]">{destino.nome}</span>
+                {" "}— perfil{" "}
+                <span className="font-semibold text-[#14323d]">{tipoViagem.rotulo}</span>.
+                Pronto para partir?
               </p>
               <div className="mt-3 flex gap-2">
                 <button

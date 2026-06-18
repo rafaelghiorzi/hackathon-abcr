@@ -67,7 +67,7 @@ export default function ShareCard({ rotaId, onFechar }: Props) {
               </div>
               <div className="rounded-xl bg-white/10 px-3 py-2.5 text-center">
                 <p className="text-lg font-bold text-white">
-                  {rota.eventos.length}
+                  {Object.values(rota.perfis)[0]?.length ?? 0}
                 </p>
                 <p className="text-[10px] text-white/60 font-medium">marcos no caminho</p>
               </div>

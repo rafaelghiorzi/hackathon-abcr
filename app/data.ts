@@ -5,10 +5,8 @@
 // ATENÇÃO: todas as estatísticas são PLACEHOLDERS ILUSTRATIVOS.
 // ============================================================================
 
-import bh from "@/routes/bh.json";
-import bhrio from "@/routes/bh-rio.json";
+import bh  from "@/routes/bh.json";
 import rio from "@/routes/rio.json";
-import sp from "@/routes/sp.json";
 
 export type EventoTipo =
   | "concessionaria"
@@ -16,7 +14,8 @@ export type EventoTipo =
   | "seguranca"
   | "parada"
   | "curiosidade"
-  | "pernoite";
+  | "pernoite"
+  | "cidade";
 
 export interface Evento {
   progress: number;
@@ -40,8 +39,8 @@ export interface Rota {
   origem: string;
   distancia_km: number;
   duracao_h: number;
-  eventos: Evento[];
-  eventosTrabalho?: Evento[];
+  perfis: Record<string, Evento[]>;
+  cidades?: Evento[];
   coords: [number, number][];
 }
 
@@ -54,32 +53,27 @@ export const TIPO_INFO: Record<EventoTipo, { rotulo: string; cor: string }> = {
   parada:         { rotulo: "Parada",          cor: "#d97706" },
   curiosidade:    { rotulo: "Curiosidade",     cor: "#7c3aed" },
   pernoite:       { rotulo: "Pernoite",        cor: "#0369a1" },
+  cidade:         { rotulo: "Cidade",          cor: "#0891b2" },
 };
 
 export const ROTAS: Record<string, Rota> = {
-  rio:    rio    as Rota,
-  sp:     sp     as Rota,
-  bh:     bh     as Rota,
-  "bh-rio": bhrio as Rota,
+  rio: rio as unknown as Rota,
+  bh:  bh  as unknown as Rota,
 };
 
 export const PARADAS_POR_ROTA: Record<string, Parada[]> = {
-  "bh-rio": [
-    { progress: 0.17, nome: "Barbacena", uf: "MG" },
-    { progress: 0.46, nome: "Juiz de Fora", uf: "MG" },
-    { progress: 0.71, nome: "Três Rios", uf: "RJ" },
-  ],
   rio: [
-    { progress: 0.26, nome: "Cristalina", uf: "GO" },
-    { progress: 0.55, nome: "C. Lafaiete", uf: "MG" },
+    { progress: 0.19, nome: "Cristalina",  uf: "GO" },
+    { progress: 0.44, nome: "Congonhas",   uf: "MG" },
+    { progress: 0.53, nome: "C. Lafaiete", uf: "MG" },
+    { progress: 0.69, nome: "Juiz de Fora",uf: "MG" },
+    { progress: 0.80, nome: "Três Rios",   uf: "RJ" },
+    { progress: 0.87, nome: "Petrópolis",  uf: "RJ" },
   ],
   bh: [
-    { progress: 0.28, nome: "Unaí", uf: "MG" },
-    { progress: 0.76, nome: "Sete Lagoas", uf: "MG" },
-  ],
-  sp: [
-    { progress: 0.40, nome: "Jataí", uf: "GO" },
-    { progress: 0.70, nome: "Ourinhos", uf: "SP" },
+    { progress: 0.25, nome: "Cristalina",  uf: "GO" },
+    { progress: 0.62, nome: "Paraopeba",   uf: "MG" },
+    { progress: 0.77, nome: "Sete Lagoas", uf: "MG" },
   ],
 };
 
@@ -89,19 +83,9 @@ export const RESUMOS: Record<string, { titulo: string; texto: string; destaque: 
     texto: "1.162 km gerenciados por concessionárias — do Planalto Central à Baía de Guanabara.",
     destaque: "Uma estrada melhor para todos",
   },
-  sp: {
-    titulo: "Chegamos a São Paulo",
-    texto: "As concessionárias transformaram o principal corredor logístico do país.",
-    destaque: "Uma estrada melhor para todos",
-  },
   bh: {
     titulo: "Chegamos a Belo Horizonte",
     texto: "733 km de parceria público-privada que aproximou a capital federal ao coração industrial do Brasil.",
-    destaque: "Uma estrada melhor para todos",
-  },
-  "bh-rio": {
-    titulo: "Chegamos ao Rio de Janeiro",
-    texto: "438 km gerenciados do início ao fim — pista duplicada, iluminada e patrulhada 24h.",
     destaque: "Uma estrada melhor para todos",
   },
 };
@@ -113,23 +97,27 @@ export interface CidadeOpcao {
   uf: string;
 }
 
-// Somente Brasília como origem — BH como cidade de partida foi removido
 export const ORIGENS: CidadeOpcao[] = [
   { id: "bsb", nome: "Brasília", uf: "DF" },
 ];
 
 export const DESTINOS_POR_ORIGEM: Record<string, (CidadeOpcao & { rotaId: string })[]> = {
   bsb: [
-    { id: "rio",  nome: "Rio de Janeiro",  uf: "RJ", rotaId: "rio"    },
-    { id: "sp",   nome: "São Paulo",       uf: "SP", rotaId: "sp"     },
-    { id: "bh",   nome: "Belo Horizonte",  uf: "MG", rotaId: "bh"     },
+    { id: "rio", nome: "Rio de Janeiro", uf: "RJ", rotaId: "rio" },
+    { id: "bh",  nome: "Belo Horizonte", uf: "MG", rotaId: "bh"  },
   ],
 };
 
-// Rota especial BH→Rio disponível via URL direta ou seleção avançada
+export const TIPOS_VIAGEM = [
+  { id: "historico", rotulo: "Histórico", abrev: "HIS", desc: "Patrimônio e cultura" },
+  { id: "culinaria", rotulo: "Culinária", abrev: "CUL", desc: "Gastronomia regional" },
+  { id: "negocios",  rotulo: "Negócios",  abrev: "NEG", desc: "Logística e indústria" },
+] as const;
+
+export type PerfilViagem = typeof TIPOS_VIAGEM[number]["id"];
+
 export const DESTINOS: { id: string; nome: string; uf: string }[] = [
   { id: "rio", nome: "Rio de Janeiro", uf: "RJ" },
-  { id: "sp",  nome: "São Paulo",      uf: "SP" },
   { id: "bh",  nome: "Belo Horizonte", uf: "MG" },
 ];
 

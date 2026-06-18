@@ -96,19 +96,14 @@ export default function RotasUsuarios({ onVoltar }: Props) {
                 </svg>
                 <span className="text-sm font-bold text-[#14323d]">{r.destino}</span>
               </div>
-              <span
-                className="rounded-full px-2.5 py-1 text-[11px] font-bold"
-                style={{ background: `${r.cor}20`, color: r.cor }}
-              >
-                {r.km.toLocaleString("pt-BR")} km
-              </span>
+
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 divide-x divide-[#f0f5f7] border-b border-[#f0f5f7] px-0">
               {[
                 { valor: r.paradas, label: "paradas" },
-                { valor: r.trechos_concedidos, label: "trechos conc." },
+                { valor: r.trechos_concedidos, label: "trechos concedidos" },
                 { valor: `${r.km} km`, label: "percurso" },
               ].map((s, j) => (
                 <div key={j} className="py-2.5 text-center">
